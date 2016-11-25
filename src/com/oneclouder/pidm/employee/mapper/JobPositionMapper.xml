@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.oneclouder.pidm.employee.dao.IJobPositionDao" >
+  <resultMap id="BaseResultMap" type="com.oneclouder.pidm.employee.model.JobPosition" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="description" property="description" jdbcType="VARCHAR" />
+    <association property="department" column="department_id"
+                 jdbcType="INTEGER"
+                 javaType="com.oneclouder.pidm.employee.model.Department"
+                 select="com.oneclouder.pidm.employee.dao.IDepartmentDao.findById">
+    </association>
+  </resultMap>
+
+  <cache type="org.mybatis.caches.ehcache.LoggingEhcache"/>
+
+  <sql id="Base_Column_List" >
+    id, name, description, department_id
+  </sql>
+
+  <select id="countByDept" resultType="java.lang.Integer" parameterType="java.lang.Integer">
+    select
+    count(id)
+    from T_JOB_POSITION j
+    <where>
+      <if test="deptId != null">
+        department_id = #{deptId,jdbcType=INTEGER}
+      </if>
+    </where>
+  </select>
+
+  <!--根据部门id查找岗位部分数据-->
+  <select id="findByDept" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+    select
+      <include refid="Base_Column_List"/>
+    from T_JOB_POSITION
+    where
+      department_id = #{deptId,jdbcType=INTEGER}
+    order by id
+  </select>
+
+  <!--根据部门id查找岗位，分页-->
+  <select id="findByDeptByPage" resultMap="BaseResultMap" parameterType="java.util.Map" >
+    select
+    <include refid="Base_Column_List" />
+    from T_JOB_POSITION
+    <where>
+      <if test="deptId != null">
+        and department_id = #{deptId,jdbcType=INTEGER}
+      </if>
+      <if test="jbName != null and !&quot;&quot;.equals(jbName.trim())">
+        and name like "%"#{jbName}"%"
+      </if>
+    </where>
+    order by id
+  </select>
+
+  <select id="findById" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from T_JOB_POSITION
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+
+  <delete id="deleteById" parameterType="java.lang.Integer" >
+    delete from T_JOB_POSITION
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+
+  <insert id="insert" parameterType="com.oneclouder.pidm.employee.model.JobPosition" >
+    insert into T_JOB_POSITION
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="name != null" >
+        name,
+      </if>
+      <if test="description != null" >
+        description,
+      </if>
+      <if test="department != null" >
+        department_id,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="name != null" >
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="description != null" >
+        #{description,jdbcType=VARCHAR},
+      </if>
+      <if test="department != null" >
+        #{department.id,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="update" parameterType="com.oneclouder.pidm.employee.model.JobPosition" >
+    update T_JOB_POSITION
+    <set >
+      <if test="name != null" >
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="description != null" >
+        description = #{description,jdbcType=VARCHAR},
+      </if>
+      <if test="department != null" >
+        department_id = #{department.id,jdbcType=INTEGER},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

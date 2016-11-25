@@ -1,0 +1,62 @@
+@charset "UTF-8";
+
+*{
+    margin: 0;
+    padding: 0;
+}
+
+#form-box{
+    width: 550px;
+    height: 300px;
+    margin: 50px auto 0;
+    background-color: #ecf0f1;
+}
+/*
+.company_choose{
+    width: 470px;
+    height: 200px;
+    margin: 80px auto;
+    padding: 50px 55px 20px 60px;
+    border: 1px solid black;
+    box-sizing: border-box;
+}
+
+.company_choose div {
+    width: 100%;
+    height: 35px;
+    line-height:35px;
+}
+
+.companyName select {
+    display: inline-block;
+    float: right;
+    margin-top: 5px;
+    margin-right: 35px;
+    width: 195px;
+    height: 25px;
+    line-height: 25px;
+}
+
+.addCompany label:nth-of-type(2) {
+    float: right;
+    margin-right: 35px;
+}
+
+.addCompany input {
+    vertical-align:text-bottom; margin-bottom:1px; margin-bottom:-2px\9;
+}
+
+.newCompany input{
+    display: inline-block;
+    float: right;
+    margin-top: 5px;
+    margin-right: 35px;
+    width: 185px;
+    height: 19px;
+    line-height: 25px;
+}
+
+.submit input{
+    display: block;
+    margin: 0 auto;
+}*/

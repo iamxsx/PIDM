@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.oneclouder.pidm.survey.dao.IOptionDao" >
+  <resultMap id="BaseResultMap" type="com.oneclouder.pidm.survey.model.TOption" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="topic_id" property="topicId" jdbcType="INTEGER" />
+    <result column="option_content" property="optionContent" jdbcType="VARCHAR" />
+    <result column="count" property="count" jdbcType="INTEGER" />
+    <result column="s_id" property="sId" jdbcType="INTEGER" />
+    <result column="nature" property="nature" jdbcType="VARCHAR" />
+  </resultMap>
+
+  <insert id="insert" parameterType="com.oneclouder.pidm.survey.model.TOption" >
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+      SELECT
+      LAST_INSERT_ID()
+    </selectKey>
+    insert into T_OPTION (topic_id, option_content,s_id,nature)
+    values (#{topicId,jdbcType=INTEGER}, #{optionContent,jdbcType=VARCHAR},
+    #{sId,jdbcType=INTEGER},#{nature,jdbcType=VARCHAR})
+  </insert>
+
+  <select id="findOptionBySid" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    SELECT * FROM T_OPTION WHERE s_id = #{s_id}
+  </select>
+
+  <update id="updateCount" parameterType="java.lang.Integer">
+      update T_OPTION set count = count+1 where id = #{id}
+  </update>
+
+  <update id="updateOptionContent" parameterType="map">
+    UPDATE T_OPTION SET option_content = #{optionContent,jdbcType=VARCHAR} WHERE id = #{id}
+  </update>
+
+  <update id="countChangeZero" parameterType="java.lang.Integer">
+    update T_OPTION set count = 0 where s_id = #{sid}
+  </update>
+</mapper>

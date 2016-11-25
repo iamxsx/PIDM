@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.oneclouder.pidm.survey.dao.ITopicDao" >
+  <resultMap id="BaseResultMap" type="com.oneclouder.pidm.survey.model.TTopic" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="survey_id" property="surveyId" jdbcType="INTEGER" />
+    <result column="topic_content" property="topicContent" jdbcType="VARCHAR" />
+    <result column="nature" property="nature" jdbcType="INTEGER" />
+  </resultMap>
+
+  <insert id="insert" parameterType="com.oneclouder.pidm.survey.model.TTopic" >
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+      SELECT
+      LAST_INSERT_ID()
+    </selectKey>
+    insert into T_TOPIC (survey_id, topic_content,
+      nature)
+    values (#{surveyId,jdbcType=INTEGER}, #{topicContent,jdbcType=VARCHAR},
+      #{nature,jdbcType=INTEGER})
+  </insert>
+
+  <select id="findTopicBySurveyid" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    SELECT * FROM T_TOPIC WHERE survey_id = #{survey_id}
+  </select>
+
+  <delete id="deleteById" parameterType="java.lang.Integer">
+    DELETE from T_TOPIC where id = #{id}
+  </delete>
+
+    <update id="updateTopicContent" parameterType="map">
+        UPDATE T_TOPIC SET topic_content = #{topicContent,jdbcType=VARCHAR} WHERE id = #{id}
+    </update>
+
+</mapper>

@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <!--任务调度-->
+    <bean id="SpringQtzJob" class="com.oneclouder.pidm.survey.test.StatisQuartz"></bean>
+
+    <bean id="SpringQtzJobMethod" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+        <property name="targetObject">
+            <ref bean="SpringQtzJob"/>
+        </property>
+        <property name="targetMethod">
+            <value>execute</value>
+        </property>
+    </bean>
+
+    <!--调度触发器-->
+    <bean id="CronTriggerBean" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+        <property name="jobDetail" ref="SpringQtzJobMethod"></property>
+        <property name="cronExpression"  value="0/5 * * * * ?"></property>
+    </bean>
+    <!--调度工厂-->
+    <bean id="SpringJobSchedulerFactoryBean"
+             class="org.springframework.scheduling.quartz.SchedulerFactoryBean" >
+        <property name="triggers">
+            <list>
+              <ref bean="CronTriggerBean"></ref>
+         </list>
+         </property>
+    </bean>
+
+</beans>

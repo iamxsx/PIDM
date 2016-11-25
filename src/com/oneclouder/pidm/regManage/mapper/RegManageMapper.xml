@@ -1,0 +1,278 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.oneclouder.pidm.regManage.dao.IRegManageDao">
+    <!--旧版本的需求
+    <resultMap id="listResultMap" type="com.oneclouder.pidm.regManage.model.RegManage">
+        <result column="associationId" property="associationId"></result>
+        <result column="companyId" property="companyId"></result>
+        <result column="companyName" property="companyName"></result>
+        <result column="associationName" property="associationName"></result>
+        <result column="identifier" property="identifier"></result>
+        <result column="city" property="city"></result>
+        <result column="county" property="county"></result>
+    </resultMap>
+    -->
+
+    <!--旧版本的需求
+    <resultMap id="userListMap" type="com.oneclouder.pidm.regManage.model.Usermessage">
+        <id column="id" property="id"></id>
+        <result column="realName" property="realName"></result>
+        <result column="approver" property="approver"></result>
+        <result column="phoneNum" property="phoneNum"></result>
+        <result column="account" property="account"></result>
+        <result column="email" property="email"></result>
+        <result column="IDcard" property="IDcard"></result>
+        <result column="status" property="status"></result>
+        <result column="frequentContact" property="frequentContact"></result>
+    </resultMap>
+    -->
+
+    <!--旧版本的需求
+    <sql id="query">
+        <if test = "type==1">
+            <if test="identifier!=null and identifier!=''">
+                AND T_COMPANY.identifier LIKE '%${identifier}%'
+            </if>
+        </if>
+        <if test = "type==2">
+            <if test="companyName!=null and companyName!=''">
+                AND T_COMPANY.name LIKE '%${companyName}'
+            </if>
+        </if>
+        <if test = "type==3">
+            <if test="associationName!=null and associationName!=''">
+                AND T_ASSOCIATION.name LIKE '%${associationName}%'
+            </if>
+        </if>
+        <if test= "type==4">
+            <if test="city!=null and city!=''">
+                AND T_COMPANY.city LIKE '%${city}%'
+            </if>
+        </if>
+    </sql>
+    -->
+
+    <!--根据查询条件查询注册信息 旧版本的需求
+    <select id="selectRegMessage" parameterType="com.oneclouder.pidm.regManage.model.RegManage" resultMap="listResultMap">
+            select
+                T_ASSOCIATION.id associationId,
+                T_COMPANY.ID companyId,
+                T_COMPANY.name companyName,
+                T_ASSOCIATION.name associationName,
+                T_COMPANY.identifier identifier,
+                T_COMPANY.city city,
+                T_COMPANY.county county
+            FROM T_ASSOCIATION,T_COMPANY
+            <where>
+                <include refid="query"></include>
+            </where>
+            LIMIT #{offset},#{limit}
+    </select>
+    -->
+
+    <!--旧版本的需求
+    <select id="selectRegMessageCount" parameterType="com.oneclouder.pidm.regManage.model.RegManage" resultType="int">
+        select COUNT(*) FROM T_ASSOCIATION,T_COMPANY
+        <where>
+            <include refid="query"></include>
+        </where>
+    </select>
+    -->
+
+    <!--旧版本的需求
+    <select id="findId" parameterType="com.oneclouder.pidm.regManage.model.RegManage" resultMap="userListMap">
+        SELECT id id,real_name realName,approver approver,status status from PIDM.T_USER_TEMPORARY where PIDM.T_USER_TEMPORARY.association_id =#{associationId} and PIDM.T_USER_TEMPORARY.company_id=#{companyId}
+    </select>
+    -->
+
+    <!--ID 公司的唯一标识 旧版本的需求
+    <select id="findAllCount" parameterType="com.oneclouder.pidm.regManage.model.Usermessage" resultMap="userListMap">
+        SELECT
+            T_USER.account,
+            T_USER.real_name realName,
+            T_USER.phone_num phoneNum,
+            T_USER.email,
+            T_USER.IDcard,
+            T_USER.frequent_contact frequentContact,
+            T_USER.id
+        FROM T_USER
+        WHERE T_USER.status=2 and T_USER.company_id=#{id} and register_status != 3 and T_USER.association_id=${frequentContact}
+        LIMIT #{offset},#{limit}
+    </select>
+    -->
+
+    <!--旧版本的需求
+    <select id="findAll" parameterType="com.oneclouder.pidm.regManage.model.Usermessage" resultType="int">
+        SELECT
+        count(*)
+        FROM T_USER
+        WHERE T_USER.status=2 and T_USER.company_id=#{id} and register_status != 3 and T_USER.association_id=${frequentContact}
+    </select>
+    -->
+
+    <!--旧版本的需求
+    <select id="findById" parameterType="int" resultMap="userListMap">
+        SELECT
+        T_USER.account,
+        T_USER.real_name realName,
+        T_USER.phone_num phoneNum,
+        T_USER.email,
+        T_USER.IDcard,
+        T_USER.frequent_contact frequentContact,
+        T_USER.id
+        FROM T_USER
+        WHERE id = #{id}
+    </select>
+    -->
+
+    <!--旧版本的需求
+    <update id="updateUser" parameterType="com.oneclouder.pidm.regManage.model.Usermessage">
+        UPDATE T_USER
+        SET real_name = #{realName}, phone_num = #{phoneNum}, email = #{email}, IDcard = #{IDcard}, frequent_contact = #{frequentContact}
+        WHERE account = #{account}
+    </update>
+    -->
+
+    <!--旧版本的需求
+    <update id="deleteId" parameterType="int">
+        UPDATE T_USER
+        SET register_status = 3
+        WHERE id = #{int}
+    </update>
+    -->
+
+    <!--新版本的需求-->
+    <resultMap id="listResultMap" type="com.oneclouder.pidm.regManage.model.RegManage">
+        <result column="companyId" property="companyId"></result>
+        <result column="companyName" property="companyName"></result>
+        <result column="associationName" property="associationName"></result>
+        <result column="identifier" property="identifier"></result>
+        <result column="chapterName" property="branchName"></result>
+        <result column="companyAddress" property="city"></result>
+    </resultMap>
+    <resultMap id="userListMap" type="com.oneclouder.pidm.regManage.model.Usermessage">
+        <id column="id" property="id"></id>
+        <result column="realName" property="realName"></result>
+        <result column="approver" property="approver"></result>
+        <result column="phoneNum" property="phoneNum"></result>
+        <result column="account" property="account"></result>
+        <result column="email" property="email"></result>
+        <result column="IDcard" property="IDcard"></result>
+        <result column="status" property="status"></result>
+        <result column="frequentContact" property="frequentContact"></result>
+    </resultMap>
+
+
+    <!--新版本的需求 查询条件-->
+    <sql id="queryNew">
+        <if test = "type==1">
+            <if test="identifier!=null and identifier!=''">
+                AND T_N_COMPANY.identifier LIKE '%${identifier}%'
+            </if>
+        </if>
+        <if test = "type==2">
+            <if test="companyName!=null and companyName!=''">
+                AND T_N_COMPANY.name LIKE '%${companyName}%'
+            </if>
+        </if>
+        <if test = "type==3">
+            <if test="associationName!=null and associationName!=''">
+                AND T_N_COMPANY.association_name LIKE '%${associationName}%'
+            </if>
+        </if>
+        <if test= "type==4">
+            <if test="branchName!=null and branchName!=''">
+                AND T_N_COMPANY.chapter_name LIKE '%${branchName}%'
+            </if>
+        </if>
+    </sql>
+
+    <select id="selectRegMessage" parameterType="com.oneclouder.pidm.regManage.model.RegManage" resultMap="listResultMap">
+        select
+        T_N_COMPANY.id companyId,
+        T_N_COMPANY.identifier identifier,
+        T_N_COMPANY.name companyName,
+        T_N_COMPANY.association_name associationName,
+        T_N_COMPANY.chapter_name chapterName,
+        T_N_COMPANY.address companyAddress
+        FROM T_N_COMPANY
+        <where>
+            <include refid="queryNew"></include>
+        </where>
+        LIMIT #{offset},#{limit}
+    </select>
+
+    <select id="selectRegMessageCount" parameterType="com.oneclouder.pidm.regManage.model.RegManage" resultType="int">
+        select COUNT(*) FROM T_N_COMPANY
+        <where>
+            <include refid="queryNew"></include>
+        </where>
+    </select>
+
+    <select id="findId" parameterType="com.oneclouder.pidm.regManage.model.RegManage" resultMap="userListMap">
+        SELECT id id,account account,real_name realName,status status
+        from T_N_TEMP_USER
+        where T_N_TEMP_USER.company_id=#{companyId}
+    </select>
+
+    <select id="findStatus" parameterType="int" resultType="int">
+        SELECT status FROM T_N_TEMP_USER
+        where T_N_TEMP_USER.id= #{int}
+    </select>
+
+    <select id="findAllCount" parameterType="com.oneclouder.pidm.regManage.model.Usermessage" resultMap="userListMap">
+        SELECT
+        T_N_USER.account,
+        T_N_USER.real_name realName,
+        T_N_USER.phone_num phoneNum,
+        T_N_USER.email email,
+        T_N_USER.IDcard IDcard,
+        T_N_USER.status status,
+        T_N_USER.id
+        FROM T_N_USER
+        WHERE T_N_USER.status in (3,4) and T_N_USER.company_id=#{id}
+        LIMIT #{offset},#{limit}
+    </select>
+
+    <select id="findAll" parameterType="com.oneclouder.pidm.regManage.model.Usermessage" resultType="int">
+        SELECT
+        count(*)
+        FROM T_N_USER
+        WHERE T_N_USER.status in (3,4) and T_N_USER.company_id=#{id}
+    </select>
+
+    <select id="findById" parameterType="int" resultMap="userListMap">
+        SELECT
+        T_N_USER.account,
+        T_N_USER.real_name realName,
+        T_N_USER.phone_num phoneNum,
+        T_N_USER.email email,
+        T_N_USER.IDcard IDcard,
+        T_N_USER.status status,
+        T_N_USER.id
+        FROM T_N_USER
+        WHERE id = #{id}
+    </select>
+
+    <update id="updateUser" parameterType="com.oneclouder.pidm.regManage.model.Usermessage">
+        UPDATE T_N_USER
+        SET real_name = #{realName}, phone_num = #{phoneNum}, email = #{email}, IDcard = #{IDcard},status = #{status}
+        WHERE account = #{account}
+    </update>
+
+    <update id="deleteId" parameterType="int">
+        UPDATE T_N_USER
+        SET register_status = 3
+        WHERE id = #{int}
+    </update>
+
+    <select id="selectCompName" parameterType="int" resultType="int">
+        SELECT ID
+        FROM T_N_TEMP_COMPANY
+        WHERE name IN (SELECT name FROM T_N_COMPANY WHERE id = #{id})
+    </select>
+
+    <select id="selectAccountByCompId" parameterType="int" resultType="String">
+        SELECT account FROM T_N_USER WHERE company_id = #{int}
+    </select>
+</mapper>

@@ -1,0 +1,395 @@
+* {
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
+div {
+    box-sizing: border-box;
+}
+
+label {
+    font-weight: normal;
+}
+
+/*::-webkit-input-placeholder { !* WebKit browsers *!
+    color:   #c0c0c0;
+}
+:-moz-placeholder { !* Mozilla Firefox 4 to 18 *!
+    color:   #c0c0c0;
+    opacity:  1;
+}
+::-moz-placeholder { !* Mozilla Firefox 19+ *!
+    color:    #c0c0c0;
+    opacity:  1;
+}
+:-ms-input-placeholder { !* Internet Explorer 10+ *!
+    color:    #c0c0c0;
+}*/
+
+/*!*Chrome Firefox Opera Safari IE9+*!
+  input:disabled{
+      border: 1px solid #DDD;
+      background-color: #c0c0c0;
+      color:#ACA899;
+  }
+!*IE8-*!
+  input[disabled]{
+      border: 1px solid #DDD;
+      background-color: #c0c0c0;
+      color:#ACA899;
+  }
+!*IE6 Using Javascript to add CSS class "disabled"*!
+* html input.disabled{
+    border: 1px solid #DDD;
+    background-color: #c0c0c0;
+    color:#ACA899;
+}*/
+
+.register1-box {
+    border: 1px solid gray;
+    width: 435px;
+    margin: 50px auto;
+    padding: 20px 0 20px 0;
+    border-radius: 20px;
+    text-align: center;
+}
+
+.ul-div b {
+    display: block;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.font-x {
+    color: red;
+}
+
+.main {
+    margin: 10px auto 50px auto;
+    padding: 10px 15px;
+    width: 1200px;
+    min-width: 1200px;
+    /*border: 1px solid #dddddd;*/
+}
+
+.form-box {
+    box-sizing: border-box;
+    padding: 10px;
+}
+
+/*.form-box label {
+    text-align: center;
+    width: 150px;
+}*/
+
+.user, .company, .comEmp {
+    padding: 10px 0;
+    border-bottom: 1px solid #cccccc;
+}
+
+.form-field, .form-sm-field, .form-xm-field {
+    margin: 5px 0;
+    float: left;
+}
+
+.form-xm-field {
+    width: 16%;
+}
+
+.form-field {
+    width: 33%;
+}
+
+.form-field input, .form-sm-field input, .form-xm-field input {
+    float: left;
+    height: 34px;
+    width: 60%;
+}
+
+.form-field label, .form-sm-field label, .form-xm-field label {
+    width: 40%;
+    line-height: 34px;
+    float: left;
+    text-align: center;
+}
+
+/*.form-field label {
+    width: 150px;
+}*/
+
+.city-linkage {
+    width: 50%;
+    float: left;
+}
+
+.city-linkage label {
+    width: 80px;
+}
+
+.city-linkage select {
+    display: inline-block;
+    width: 56%;
+    height: 34px;
+    font-size:12px;
+}
+
+.form-sm-field {
+    width: 25%;
+    position: relative;
+}
+
+.a-position {
+    float: left;
+}
+
+.a-position1 {
+    padding: 0 4px;
+    width: 40%;
+}
+
+.a-position1 label {
+    width: 50px;
+}
+
+.a-position1 input {
+    width: 50px;
+}
+
+.a-position2 {
+    width: 60%;
+}
+
+.form-sm-field button {
+    position: absolute;
+    top: 5px;
+    left: 300px;
+    display: block;
+    border: none;
+    background-color: #00bdef;
+    color: #ffffff;
+    font-size: 20px;
+    line-height: 24px;
+    border-radius: 12px;
+    width: 24px;
+    height: 24px;
+}
+
+.set-fs {
+    font-size: 13px;
+    line-height: 1.0;
+}
+
+.desc {
+    padding: 10px 0;
+}
+
+.desc > div {
+    padding: 10px 0;
+}
+
+.desc label {
+    text-align: center;
+    float: left;
+    width: 10%;
+    padding: 0 5px;
+}
+
+.ta-lag {
+    width: 80%;
+    padding: 6px 12px;
+    font-size: 14px;
+    line-height: 1.42857143;
+    color: #555;
+    background-color: #fff;
+    background-image: none;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
+    box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
+}
+
+.readed {
+    padding: 0 15px;
+}
+
+.readed a {
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.r-btn {
+    display: block;
+    margin: 15px auto;
+}
+
+textarea {
+    resize: none;
+}
+
+.l-h {
+    line-height: 1.0;
+}
+
+.county {
+}
+
+.jump-box {
+    margin: 50px auto;
+    border: 1px solid #cccccc;
+    border-radius: 10px;
+    width: 450px;
+    height: 240px;
+    line-height: 240px;
+    text-align: center;
+}
+
+.login-box {
+    position: absolute;
+    right: 23px;
+    top: 50px;
+    width: 300px;
+    /*height: 325px;*/
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 20px 20px;
+    z-index: 999999;
+    display: none;
+    opacity: 1;
+    background-color: #fefffe;
+}
+
+.login-box label {
+    margin: 0;
+}
+
+.login-box button {
+    margin: 5px auto;
+    padding: 0;
+    height: 40px;
+}
+
+.login-box > button {
+    background-color: #fff;
+    border: none;
+    color: #cccccc;
+    position: absolute;
+    height: 10px;
+    width: 10px;
+    line-height: 10px;
+    top: 5px;
+    right: 5px;
+}
+
+.login-box h3 {
+    margin: 0 0 15px 0;
+    padding: 0;
+}
+
+.login-box a {
+    text-decoration: none;
+}
+
+.code1 {
+    line-height: 39px;
+}
+
+.code1 label {
+    width: 30%;
+    float: left;
+}
+
+.code1 > div {
+    width: 70%;
+    float: right;
+}
+
+.code1 > div input {
+    float: left;
+    margin-left: 10px;
+    width: 50%;
+}
+
+.code1 > div img {
+    vertical-align: middle;
+    float: right;
+    height: 34px;
+    width: 40%;
+}
+
+.left {
+    float: left;
+}
+
+.right {
+    float: right;
+}
+
+.legalRep {
+    display: none;
+}
+
+.password-reset {
+    width: 900px;
+    padding: 10px 100px;
+    margin: 50px auto;
+    border: 4px solid #eceff1;
+    border-radius: 8px;
+}
+
+.password-reset img {
+    width: 90px;
+    height: 34px;
+}
+
+.password-reset a {
+    line-height: 34px;
+}
+
+.p-titel {
+    color: #cccccc;
+    margin-bottom: 10px;
+    border-bottom: 1px dashed #ddd;
+}
+
+.msgs1 {
+    background: #E6E6E6;
+    color: #818080;
+}
+
+.pBtn {
+    text-align: center;
+}
+
+.check-style {
+    color: red;
+}
+
+.my-row {
+    width: 100%;
+}
+
+.error-info {
+    width: 100%;
+    padding-left:40%;
+    font-size: 12px;
+    color: red;
+}
+
+/*.error-info {
+    text-align: center;
+    font-size: 12px;
+    color: red;
+}
+
+.error-info li {
+    list-style: none;
+}
+
+.user-error li {
+    float: left;
+    width: 33%;
+}*/

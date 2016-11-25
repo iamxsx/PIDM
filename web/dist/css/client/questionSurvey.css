@@ -1,0 +1,106 @@
+.container-fluid{
+    width: 65%;
+    background-color: white;
+    padding: 2em;
+    margin-top: 1em;
+    box-shadow: 0 0 12px rgba(0,0,0,.1);
+}
+.conContent{
+    margin: 0 3em;
+}
+.title{
+    font-size: 18px;
+    font-weight: bold;
+    color: black;
+}
+#button-list{
+    list-style: none;
+    margin: 1em 3em;
+}
+#button-list li{
+    float: left;
+    margin: 0 0.7em;
+}
+.fix{
+    position: fixed;
+    right: 4%;
+    top: 35%;
+    z-index: 10;
+}
+.btn-li{
+    clear: both;
+/*    display: inline;*/
+    height: 40px;
+    vertical-align: middle;
+}
+.button{
+    max-height: 40px;
+   /* width: 16px;*/
+    line-height:18px;
+}
+
+input[type='text']{
+    margin: 1em 0;
+}
+#con{
+    clear: both;
+    width: 90%;
+}
+.question-content{
+    border: 0px;
+    border-bottom: 1px solid black;
+}
+.answ{
+    line-height: 34px;
+}
+.answ input[type='radio']{
+    display: inline;
+    width: 0;
+    height: 0;
+    margin-top: 5px;
+    margin-right: 5px;
+}
+.answ input[type='checkbox']{
+    display: inline;
+    width: 0;
+    height: 0;
+    margin-top: 5px;
+    margin-right: 5px;
+}
+.answer{
+    padding: 0;
+    margin: 5px 1em;
+}
+.answer input[type='text']{
+    margin: 0;
+    display: inline;
+    width: 60%;
+}
+#btn-list{
+    width: 10em;
+    margin: 2.5em auto;
+}
+#btn-list button{
+    padding: 0.3em 3em;
+}
+.remove-btn{
+    /*background-color: red;*/
+
+    display: block;
+    float: left;
+    padding:0.04em 0.2em;
+    border-radius: 2em;
+    border:0;
+}
+.deleteButton{
+    margin-top: 0.1em;
+    margin-right: 0.3em;
+    width: 15px;
+    height: 15px;
+}
+.question{
+    margin: 3em 0;
+}
+.question-title{
+    margin: 2em 3em;
+}

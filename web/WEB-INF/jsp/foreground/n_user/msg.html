@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="../../../../dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../../../../dist/css/n_user/register.css">
+    <link rel="stylesheet" href="../../../../dist/css/n_user/msg.css">
+    <title>跳转页面</title>
+</head>
+<body>
+<header class="header-box">
+    <a href="#"><img src="../../../../imgs/logo.png"></a>
+    <a class="g-index" href="#">回到首页</a>
+</header>
+<div class="msg-titel"></div>
+<div id="msg-box" class="msg-sty">
+    <div class="msg-header"></div>
+    <div class="msg-tip">
+        <span class="info"><span style="font-size: 18px;color: cornflowerblue">注册成功，请到邮箱中激活账号，</span>页面将在<i id="time">10</i>秒后自动跳转...</span>
+    </div>
+</div>
+<form action="#" id="redirectForm" method="post">
+    <input type="hidden" name="msg" value="${mag}">
+</form>
+
+</body>
+<script src="../../../../dist/js/jquery.min.js"></script>
+<script>
+    $(function () {
+        setTimeout(ChangeTime, 1000);
+    });
+    function ChangeTime() {
+        var time;
+        time = $("#time").text();
+        time = parseInt(time);
+        time--;
+        if (time <= 0) {
+            $("#redirectForm").submit();
+        } else {
+            $("#time").text(time);
+            setTimeout(ChangeTime, 1000);
+        }
+    }
+</script>
+</html>

@@ -1,0 +1,162 @@
+
+#text{
+    border: 1px lightgray solid;
+    border-radius: 4px;
+}
+
+.login-page {
+    /*background-color: #e5e7ed;*/
+    /*background-image: url("../../../../imgs/login_bg.jpg");*/
+    background-size: cover;
+    background-repeat: no-repeat;
+}
+
+.login-page main {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 100%;
+    max-width: 460px
+}
+
+.login-block {
+    background-color: rgba(161,197,190,0.2);
+    padding: 60px;
+    box-shadow: 0 3px 50px 0 rgba(0, 0, 0, .1);
+    text-align: center;
+    border-radius: 5px
+}
+
+.login-block h1, .login-block h6 {
+    font-family: Open Sans, sans-serif;
+    color: #96a2b2;
+    letter-spacing: 1px
+}
+
+.login-block h2 {
+    font-size: 30px;
+    margin-bottom: 30px;
+    margin-top: 30px
+}
+
+.login-block h6 {
+    font-size: 11px;
+    text-transform: uppercase;
+    margin-top: 0
+}
+
+.login-block .form-group {
+    margin-top: 15px;
+    margin-bottom: 15px
+}
+
+.login-block .form-control, .login-block .form-control:focus, .login-block .input-group-addon, .login-block .input-group-addon:focus {
+    background-color: rgb(222, 239, 225);
+    border: none
+}
+
+.login-block .form-control {
+    font-size: 17px
+}
+
+.login-block input:-webkit-autofill {
+    -webkit-box-shadow: 0 0 0 1000px #fff inset;
+    -webkit-text-fill-color: #818a91;
+    transition: none
+}
+
+.login-block .input-group-addon {
+    color: #169f84;
+    font-size: 19px;
+    opacity: .5
+}
+
+.login-block .btn-block {
+    margin-top: 30px;
+    background-color: rgb(255, 255, 255);
+    border: none;
+}
+
+.login-block .btn-block:hover{
+    background-color: #ededed;
+}
+
+.login-block .hr-xs {
+    margin-top: 5px;
+    margin-bottom: 5px
+}
+
+.login-footer {
+    margin-top: 60px;
+    opacity: .5;
+    transition: opacity .3s ease-in-out
+}
+
+.login-footer:hover {
+    opacity: 1
+}
+
+.login-links {
+    padding: 15px 5px 0;
+    font-size: 13px;
+    color: #96a2b2
+}
+
+.login-links:after {
+    content: '';
+    display: table;
+    clear: both
+}
+
+.login-links a {
+    color: #96a2b2;
+    opacity: .9
+}
+
+.login-links a:hover {
+    color: #29aafe;
+    opacity: 1
+}
+
+.login-block .resultMsg{
+    font-size: 1.0em;
+    color:#ff0000;
+    margin-top: 10px;
+}
+
+#captcha-input{
+    width: 67%;
+    border-radius: 4px;
+}
+
+#kaptchaImage{
+    margin-left: 3%;
+    width: 30%;
+    cursor: pointer;
+    text-align: center;
+}
+
+.form-control{
+    height: 38px;
+}
+
+#code-input{
+    width: 60%;
+    border-radius: 4px;
+    margin-right: 3%;
+}
+
+#getPhoneMsgBtn{
+    background-color: rgb(255, 255, 255);
+    border: none;
+    width: 37%;
+    height: 38px;
+    padding: 0;
+    font-size: 0.9em;
+    text-align: center;
+}
+
+#getPhoneMsgBtn:hover{
+    background-color: #ededed;
+}

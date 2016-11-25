@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.oneclouder.pidm.user.dao.ICompanyDao">
+    <resultMap id="BaseResultMap" type="com.oneclouder.pidm.user.model.Company">
+        <id column="id" property="id"/>
+        <result column="identifier" property="identifier"/>
+        <result column="name" property="name"/>
+        <result column="nature" property="nature"/>
+        <result column="city" property="city"/>
+        <result column="county" property="county"/>
+        <result column="address" property="address"/>
+        <result column="zip_code" property="zipCode"/>
+        <result column="internet_site" property="internetSite"/>
+        <result column="fax_num" property="faxNum"/>
+        <result column="register_nature" property="registerNature"/>
+        <result column="industry" property="industry"/>
+        <result column="admin_department" property="adminDepartment"/>
+        <result column="employee_num" property="employeeNum"/>
+        <result column="email" property="email"/>
+    </resultMap>
+
+    <resultMap id="SimpleResultmap" type="com.oneclouder.pidm.user.model.Company">
+        <id column="id" property="id"/>
+        <result column="name" property="name"/>
+    </resultMap>
+
+    <sql id="Base_Column_List" >
+        id, identifier, name, nature, city, county, address, zip_code, internet_site, fax_num, register_nature,
+        industry, admin_department, employee_num, email
+    </sql>
+
+    <sql id="Simple_Column_List">
+        id, name
+    </sql>
+    
+    <select id="findById" parameterType="int" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM T_COMPANY
+        WHERE id = #{companyId}
+    </select>
+
+    <select id="accountCompanyByName" parameterType="string" resultType="int">
+        SELECT count(*)
+        FROM T_COMPANY
+        WHERE name = #{companyname}
+    </select>
+
+    <select id="findCompanyByName" parameterType="string" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM T_COMPANY
+        WHERE name = #{companyname}
+    </select>
+
+    <select id="findAllCompanies" resultMap="SimpleResultmap">
+        SELECT
+        <include refid="Simple_Column_List"/>
+        FROM T_COMPANY
+    </select>
+
+
+    <insert id="insert" parameterType="com.oneclouder.pidm.user.model.Company">
+        <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+            select
+            LAST_INSERT_ID()
+        </selectKey>
+        INSERT INTO T_COMPANY
+        (name, identifier, nature,
+        city, county, address,
+        zip_code, internet_site, fax_num,
+        register_nature, industry, admin_department,
+        employee_num, email
+        )
+        VALUE (#{name}, #{identifier}, #{nature},
+        #{city}, #{county}, #{address},
+        #{zipCode}, #{internetSite}, #{faxNum},
+        #{registerNature}, #{industry}, #{adminDepartment},
+        #{employeeNum}, #{email}
+        )
+    </insert>
+
+    <!--更新公司信息-->
+    <update id="update" parameterType="com.oneclouder.pidm.user.model.Company" >
+        update T_COMPANY
+        set
+            name = #{name,jdbcType=VARCHAR},
+            nature = #{nature,jdbcType=VARCHAR},
+            city = #{city,jdbcType=VARCHAR},
+            county = #{county,jdbcType=VARCHAR},
+            address = #{address,jdbcType=VARCHAR},
+            zip_code = #{zipCode,jdbcType=VARCHAR},
+            internet_site = #{internetSite,jdbcType=VARCHAR},
+            fax_num = #{faxNum,jdbcType=VARCHAR},
+            register_nature = #{registerNature,jdbcType=VARCHAR},
+            industry = #{industry,jdbcType=VARCHAR},
+            admin_department = #{adminDepartment,jdbcType=VARCHAR},
+            employee_num = #{employeeNum,jdbcType=VARCHAR},
+            email = #{email,jdbcType=VARCHAR }
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+
+
+</mapper>

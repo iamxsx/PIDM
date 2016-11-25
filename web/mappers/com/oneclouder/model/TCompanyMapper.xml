@@ -1,0 +1,428 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.oneclouder.model.TCompanyMapper" >
+  <resultMap id="BaseResultMap" type="com.oneclouder.model.TCompany" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="nature" property="nature" jdbcType="VARCHAR" />
+    <result column="city" property="city" jdbcType="VARCHAR" />
+    <result column="county" property="county" jdbcType="VARCHAR" />
+    <result column="address" property="address" jdbcType="VARCHAR" />
+    <result column="zip_code" property="zipCode" jdbcType="VARCHAR" />
+    <result column="internet_site" property="internetSite" jdbcType="VARCHAR" />
+    <result column="fax_num" property="faxNum" jdbcType="VARCHAR" />
+    <result column="register_nature" property="registerNature" jdbcType="VARCHAR" />
+    <result column="industry" property="industry" jdbcType="VARCHAR" />
+    <result column="admin_department" property="adminDepartment" jdbcType="VARCHAR" />
+    <result column="employee_num" property="employeeNum" jdbcType="INTEGER" />
+  </resultMap>
+  <resultMap id="ResultMapWithBLOBs" type="com.oneclouder.model.TCompanyWithBLOBs" extends="BaseResultMap" >
+    <result column="description1" property="description1" jdbcType="LONGVARCHAR" />
+    <result column="description2" property="description2" jdbcType="LONGVARCHAR" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    id, name, nature, city, county, address, zip_code, internet_site, fax_num, register_nature, 
+    industry, admin_department, employee_num
+  </sql>
+  <sql id="Blob_Column_List" >
+    description1, description2
+  </sql>
+  <select id="selectByExampleWithBLOBs" resultMap="ResultMapWithBLOBs" parameterType="com.oneclouder.model.TCompanyExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from T_COMPANY
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.oneclouder.model.TCompanyExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from T_COMPANY
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from T_COMPANY
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from T_COMPANY
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.oneclouder.model.TCompanyExample" >
+    delete from T_COMPANY
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.oneclouder.model.TCompanyWithBLOBs" >
+    insert into T_COMPANY (id, name, nature, 
+      city, county, address, 
+      zip_code, internet_site, fax_num, 
+      register_nature, industry, admin_department, 
+      employee_num, description1, description2
+      )
+    values (#{id,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, #{nature,jdbcType=VARCHAR}, 
+      #{city,jdbcType=VARCHAR}, #{county,jdbcType=VARCHAR}, #{address,jdbcType=VARCHAR}, 
+      #{zipCode,jdbcType=VARCHAR}, #{internetSite,jdbcType=VARCHAR}, #{faxNum,jdbcType=VARCHAR}, 
+      #{registerNature,jdbcType=VARCHAR}, #{industry,jdbcType=VARCHAR}, #{adminDepartment,jdbcType=VARCHAR}, 
+      #{employeeNum,jdbcType=INTEGER}, #{description1,jdbcType=LONGVARCHAR}, #{description2,jdbcType=LONGVARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.oneclouder.model.TCompanyWithBLOBs" >
+    insert into T_COMPANY
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="name != null" >
+        name,
+      </if>
+      <if test="nature != null" >
+        nature,
+      </if>
+      <if test="city != null" >
+        city,
+      </if>
+      <if test="county != null" >
+        county,
+      </if>
+      <if test="address != null" >
+        address,
+      </if>
+      <if test="zipCode != null" >
+        zip_code,
+      </if>
+      <if test="internetSite != null" >
+        internet_site,
+      </if>
+      <if test="faxNum != null" >
+        fax_num,
+      </if>
+      <if test="registerNature != null" >
+        register_nature,
+      </if>
+      <if test="industry != null" >
+        industry,
+      </if>
+      <if test="adminDepartment != null" >
+        admin_department,
+      </if>
+      <if test="employeeNum != null" >
+        employee_num,
+      </if>
+      <if test="description1 != null" >
+        description1,
+      </if>
+      <if test="description2 != null" >
+        description2,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="name != null" >
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="nature != null" >
+        #{nature,jdbcType=VARCHAR},
+      </if>
+      <if test="city != null" >
+        #{city,jdbcType=VARCHAR},
+      </if>
+      <if test="county != null" >
+        #{county,jdbcType=VARCHAR},
+      </if>
+      <if test="address != null" >
+        #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="zipCode != null" >
+        #{zipCode,jdbcType=VARCHAR},
+      </if>
+      <if test="internetSite != null" >
+        #{internetSite,jdbcType=VARCHAR},
+      </if>
+      <if test="faxNum != null" >
+        #{faxNum,jdbcType=VARCHAR},
+      </if>
+      <if test="registerNature != null" >
+        #{registerNature,jdbcType=VARCHAR},
+      </if>
+      <if test="industry != null" >
+        #{industry,jdbcType=VARCHAR},
+      </if>
+      <if test="adminDepartment != null" >
+        #{adminDepartment,jdbcType=VARCHAR},
+      </if>
+      <if test="employeeNum != null" >
+        #{employeeNum,jdbcType=INTEGER},
+      </if>
+      <if test="description1 != null" >
+        #{description1,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="description2 != null" >
+        #{description2,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.oneclouder.model.TCompanyExample" resultType="java.lang.Integer" >
+    select count(*) from T_COMPANY
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update T_COMPANY
+    <set >
+      <if test="record.id != null" >
+        id = #{record.id,jdbcType=INTEGER},
+      </if>
+      <if test="record.name != null" >
+        name = #{record.name,jdbcType=VARCHAR},
+      </if>
+      <if test="record.nature != null" >
+        nature = #{record.nature,jdbcType=VARCHAR},
+      </if>
+      <if test="record.city != null" >
+        city = #{record.city,jdbcType=VARCHAR},
+      </if>
+      <if test="record.county != null" >
+        county = #{record.county,jdbcType=VARCHAR},
+      </if>
+      <if test="record.address != null" >
+        address = #{record.address,jdbcType=VARCHAR},
+      </if>
+      <if test="record.zipCode != null" >
+        zip_code = #{record.zipCode,jdbcType=VARCHAR},
+      </if>
+      <if test="record.internetSite != null" >
+        internet_site = #{record.internetSite,jdbcType=VARCHAR},
+      </if>
+      <if test="record.faxNum != null" >
+        fax_num = #{record.faxNum,jdbcType=VARCHAR},
+      </if>
+      <if test="record.registerNature != null" >
+        register_nature = #{record.registerNature,jdbcType=VARCHAR},
+      </if>
+      <if test="record.industry != null" >
+        industry = #{record.industry,jdbcType=VARCHAR},
+      </if>
+      <if test="record.adminDepartment != null" >
+        admin_department = #{record.adminDepartment,jdbcType=VARCHAR},
+      </if>
+      <if test="record.employeeNum != null" >
+        employee_num = #{record.employeeNum,jdbcType=INTEGER},
+      </if>
+      <if test="record.description1 != null" >
+        description1 = #{record.description1,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="record.description2 != null" >
+        description2 = #{record.description2,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExampleWithBLOBs" parameterType="map" >
+    update T_COMPANY
+    set id = #{record.id,jdbcType=INTEGER},
+      name = #{record.name,jdbcType=VARCHAR},
+      nature = #{record.nature,jdbcType=VARCHAR},
+      city = #{record.city,jdbcType=VARCHAR},
+      county = #{record.county,jdbcType=VARCHAR},
+      address = #{record.address,jdbcType=VARCHAR},
+      zip_code = #{record.zipCode,jdbcType=VARCHAR},
+      internet_site = #{record.internetSite,jdbcType=VARCHAR},
+      fax_num = #{record.faxNum,jdbcType=VARCHAR},
+      register_nature = #{record.registerNature,jdbcType=VARCHAR},
+      industry = #{record.industry,jdbcType=VARCHAR},
+      admin_department = #{record.adminDepartment,jdbcType=VARCHAR},
+      employee_num = #{record.employeeNum,jdbcType=INTEGER},
+      description1 = #{record.description1,jdbcType=LONGVARCHAR},
+      description2 = #{record.description2,jdbcType=LONGVARCHAR}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update T_COMPANY
+    set id = #{record.id,jdbcType=INTEGER},
+      name = #{record.name,jdbcType=VARCHAR},
+      nature = #{record.nature,jdbcType=VARCHAR},
+      city = #{record.city,jdbcType=VARCHAR},
+      county = #{record.county,jdbcType=VARCHAR},
+      address = #{record.address,jdbcType=VARCHAR},
+      zip_code = #{record.zipCode,jdbcType=VARCHAR},
+      internet_site = #{record.internetSite,jdbcType=VARCHAR},
+      fax_num = #{record.faxNum,jdbcType=VARCHAR},
+      register_nature = #{record.registerNature,jdbcType=VARCHAR},
+      industry = #{record.industry,jdbcType=VARCHAR},
+      admin_department = #{record.adminDepartment,jdbcType=VARCHAR},
+      employee_num = #{record.employeeNum,jdbcType=INTEGER}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.oneclouder.model.TCompanyWithBLOBs" >
+    update T_COMPANY
+    <set >
+      <if test="name != null" >
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="nature != null" >
+        nature = #{nature,jdbcType=VARCHAR},
+      </if>
+      <if test="city != null" >
+        city = #{city,jdbcType=VARCHAR},
+      </if>
+      <if test="county != null" >
+        county = #{county,jdbcType=VARCHAR},
+      </if>
+      <if test="address != null" >
+        address = #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="zipCode != null" >
+        zip_code = #{zipCode,jdbcType=VARCHAR},
+      </if>
+      <if test="internetSite != null" >
+        internet_site = #{internetSite,jdbcType=VARCHAR},
+      </if>
+      <if test="faxNum != null" >
+        fax_num = #{faxNum,jdbcType=VARCHAR},
+      </if>
+      <if test="registerNature != null" >
+        register_nature = #{registerNature,jdbcType=VARCHAR},
+      </if>
+      <if test="industry != null" >
+        industry = #{industry,jdbcType=VARCHAR},
+      </if>
+      <if test="adminDepartment != null" >
+        admin_department = #{adminDepartment,jdbcType=VARCHAR},
+      </if>
+      <if test="employeeNum != null" >
+        employee_num = #{employeeNum,jdbcType=INTEGER},
+      </if>
+      <if test="description1 != null" >
+        description1 = #{description1,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="description2 != null" >
+        description2 = #{description2,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.oneclouder.model.TCompanyWithBLOBs" >
+    update T_COMPANY
+    set name = #{name,jdbcType=VARCHAR},
+      nature = #{nature,jdbcType=VARCHAR},
+      city = #{city,jdbcType=VARCHAR},
+      county = #{county,jdbcType=VARCHAR},
+      address = #{address,jdbcType=VARCHAR},
+      zip_code = #{zipCode,jdbcType=VARCHAR},
+      internet_site = #{internetSite,jdbcType=VARCHAR},
+      fax_num = #{faxNum,jdbcType=VARCHAR},
+      register_nature = #{registerNature,jdbcType=VARCHAR},
+      industry = #{industry,jdbcType=VARCHAR},
+      admin_department = #{adminDepartment,jdbcType=VARCHAR},
+      employee_num = #{employeeNum,jdbcType=INTEGER},
+      description1 = #{description1,jdbcType=LONGVARCHAR},
+      description2 = #{description2,jdbcType=LONGVARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.oneclouder.model.TCompany" >
+    update T_COMPANY
+    set name = #{name,jdbcType=VARCHAR},
+      nature = #{nature,jdbcType=VARCHAR},
+      city = #{city,jdbcType=VARCHAR},
+      county = #{county,jdbcType=VARCHAR},
+      address = #{address,jdbcType=VARCHAR},
+      zip_code = #{zipCode,jdbcType=VARCHAR},
+      internet_site = #{internetSite,jdbcType=VARCHAR},
+      fax_num = #{faxNum,jdbcType=VARCHAR},
+      register_nature = #{registerNature,jdbcType=VARCHAR},
+      industry = #{industry,jdbcType=VARCHAR},
+      admin_department = #{adminDepartment,jdbcType=VARCHAR},
+      employee_num = #{employeeNum,jdbcType=INTEGER}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

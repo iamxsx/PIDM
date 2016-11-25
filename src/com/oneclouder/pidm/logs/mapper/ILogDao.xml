@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.oneclouder.pidm.logs.dao.ILogDao">
+
+    <resultMap id="BaseResultMap" type="com.oneclouder.pidm.logs.model.ExceptionLogInfo">
+        <id column="id" property="id"/>
+        <result column="exceptionMethod" property="exceptionMethod"/>
+        <result column="methodArgs" property="methodArgs"/>
+        <result column="exceptionName" property="exceptionName"/>
+        <result column="exceptionDesc" property="exceptionDesc"/>
+        <result column="time" property="time"/>
+    </resultMap>
+
+    <insert id="recordException" parameterType="com.oneclouder.pidm.logs.model.ExceptionLogInfo">
+        INSERT INTO T_EXCEPTION_LOGS (exceptionMethod,methodArgs,exceptionName,exceptionDesc,time)
+        VALUES (#{exceptionMethod},#{methodArgs},#{exceptionName},#{exceptionDesc},#{time})
+    </insert>
+
+    <select id="findLogsByPage" parameterType="map" resultMap="BaseResultMap">
+        SELECT * FROM T_EXCEPTION_LOGS ORDER BY time desc limit #{offset},#{limit}
+    </select>
+
+    <select id="getLogCount" resultType="int">
+        SELECT COUNT(*) FROM T_EXCEPTION_LOGS
+    </select>
+
+
+
+</mapper>

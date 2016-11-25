@@ -1,0 +1,286 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.oneclouder.pidm.user.dao.IUserDao">
+    <resultMap id="BaseResultMap" type="com.oneclouder.pidm.user.model.User">
+        <id column="id" property="id"/>
+        <result column="account" property="account"/>
+        <result column="password" property="password"/>
+        <result column="salt" property="salt"/>
+        <result column="phone_num" property="phoneNum"/>
+        <result column="IDcard" property="IDcard"/>
+        <result column="real_name" property="realName"/>
+        <result column="email" property="email"/>
+        <result column="verifycode" property="verifycode"/>
+        <result column="status" property="status"/>
+        <result column="association_id" property="associationId"/>
+        <result column="register_status" property="registerStatus"/>
+        <result column="job_position" property="jobPosition"/>
+        <result column="frequent_contact" property="frequentContact"/>
+        <result column="approver" property="approver"/>
+        <association column="designated_contact" property="designatedContact"
+                     javaType="com.oneclouder.pidm.user.model.CompanyEmployee"
+                     select="com.oneclouder.pidm.user.dao.ICompanyEmployeeDao.findById"/>
+        <association column="company_id" property="company"
+                     javaType="com.oneclouder.pidm.user.model.Company"
+                     select="com.oneclouder.pidm.user.dao.ICompanyDao.findById"/>
+        <association column="asct_unit_id" property="associationUnit"
+                     javaType="com.oneclouder.pidm.user.model.AssociationUnit"
+                     select="com.oneclouder.pidm.user.dao.IAssociationUnitDao.findById"/>
+    </resultMap>
+
+    <resultMap id="SimpleResultMap" type="com.oneclouder.pidm.user.webBean.UserSimpleInfo">
+        <id column="id" property="id"/>
+        <result column="account" property="account"/>
+        <result column="name" property="compayName"/>
+        <result column="address" property="address"/>
+        <result column="desContactName" property="desContactName"/>
+        <result column="cell_phone_num" property="phoneNum"/>
+        <result column="fax_num" property="faxNum"/>
+        <result column="email" property="email"/>
+    </resultMap>
+
+    <resultMap id="FindBaseName" type="com.oneclouder.pidm.user.model.User">
+        <id column="id" property="id"/>
+        <result column="real_name" property="realName"/>
+        <association column="company_id" property="company"
+                     javaType="com.oneclouder.pidm.user.model.Company"
+                     select="com.oneclouder.pidm.user.dao.ICompanyDao.findById"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id, account, password, salt, phone_num, IDcard, real_name, email, verifycode, status, association_id,
+        register_status, job_position, frequent_contact, designated_contact, company_id,
+        asct_unit_id, approver
+    </sql>
+
+    <!--根据条件查询客户信息-->
+    <select id="getUserSimpleInfo" parameterType="com.oneclouder.pidm.user.webBean.UserSimpleInfo"
+            resultMap="SimpleResultMap">
+        SELECT u.account,m.name,m.address,e.name desContactName,e.cell_phone_num,m.fax_num,u.email
+        FROM T_USER u,T_COMPANY m,T_COMPANY_EMPLOYEE e WHERE u.designated_contact = e.id AND u.company_id = m.id AND
+        u.register_status = 2
+        <if test="searchCondition==0">AND u.account LIKE CONCAT(CONCAT('%', #{keyWord}), '%')</if>
+        <if test="searchCondition==1">AND m.name LIKE CONCAT(CONCAT('%', #{keyWord}), '%')</if>
+        <if test="searchCondition==2">AND m.address LIKE CONCAT(CONCAT('%', #{keyWord}), '%')</if>
+        <if test="searchCondition==3">AND e.name LIKE CONCAT(CONCAT('%', #{keyWord}), '%')</if>
+        <if test="searchCondition==4">AND e.cell_phone_num LIKE CONCAT(CONCAT('%', #{keyWord}), '%')</if>
+        <if test="searchCondition==5">AND m.fax_num LIKE CONCAT(CONCAT('%', #{keyWord}), '%')</if>
+        <if test="searchCondition==6">AND u.email LIKE CONCAT(CONCAT('%', #{keyWord}), '%')</if>
+        ORDER BY u.id DESC
+    </select>
+
+    <!--分页查询-->
+    <select id="getUserSimpleInfoLimit" parameterType="com.oneclouder.pidm.user.webBean.UserSimpleInfo"
+            resultMap="SimpleResultMap">
+        SELECT u.id,u.account,m.name,m.address,e.name desContactName,e.cell_phone_num,m.fax_num,u.email
+        FROM T_USER u,T_COMPANY m,T_COMPANY_EMPLOYEE e WHERE u.designated_contact = e.id AND u.company_id = m.id AND
+        u.register_status = 2
+        <if test="searchCondition==0">AND u.account LIKE CONCAT(CONCAT('%', #{keyWord}), '%')</if>
+        <if test="searchCondition==1">AND m.name LIKE CONCAT(CONCAT('%', #{keyWord}), '%')</if>
+        <if test="searchCondition==2">AND m.address LIKE CONCAT(CONCAT('%', #{keyWord}), '%')</if>
+        <if test="searchCondition==3">AND e.name LIKE CONCAT(CONCAT('%', #{keyWord}), '%')</if>
+        <if test="searchCondition==4">AND e.cell_phone_num LIKE CONCAT(CONCAT('%', #{keyWord}), '%')</if>
+        <if test="searchCondition==5">AND m.fax_num LIKE CONCAT(CONCAT('%', #{keyWord}), '%')</if>
+        <if test="searchCondition==6">AND u.email LIKE CONCAT(CONCAT('%', #{keyWord}), '%')</if>
+        ORDER BY u.id DESC LIMIT #{limitFrom},#{limitNumber}
+    </select>
+
+    <!--查询客户详细信息-->
+    <select id="getUserInfoEle" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+        SELECT * FROM T_USER WHERE id = #{id}
+    </select>
+
+    <!--查询数据库用户记录条数-->
+    <select id="userInfoNum" resultType="java.lang.Integer">
+        SELECT COUNT(*) FROM T_USER
+    </select>
+
+    <!--查询所属协会-->
+    <select id="judgeBelong" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+      SELECT association_id FROM T_USER WHERE id = #{id}
+    </select>
+
+    <!--选择用户信息-->
+    <select id="getUserInfoById" parameterType="integer" resultMap="FindBaseName">
+        SELECT * FROM T_USER
+        WHERE id=#{user_id}
+    </select>
+
+    <!--根据id查询user-->
+    <select id="findById" parameterType="int" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM T_USER
+        WHERE id = #{userId}
+    </select>
+
+    <!--匹配验证码，得到用户信息-->
+    <select id="verifyCode" parameterType="string" resultType="int">
+        SELECT
+        id
+        FROM T_USER
+        where binary verifyCode=#{verifyCode}
+    </select>
+
+    <!--根据帐号查处盐-->
+    <select id="findSaltByAccount" parameterType="string" resultType="string">
+        SELECT
+        salt
+        FROM T_USER
+        WHERE binary account = #{account}
+    </select>
+
+    <!--根据帐号密码查询用户-->
+    <select id="findByAccountAndPassword" parameterType="map" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM T_USER
+        WHERE binary account = #{account}
+        AND binary password = #{password}
+        AND register_status IN (1,2)
+    </select>
+
+    <!--根据帐号 查询记录数-->
+    <select id="findAccountNum" parameterType="string" resultType="int">
+        SELECT count(*)
+        FROM T_USER
+        WHERE binary account = #{account}
+    </select>
+
+    <select id="isWriteSurvey" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+        SELECT survey_id FROM T_USER WHERE id = #{id}
+    </select>
+
+    <!--激活用户-->
+    <update id="active" parameterType="int">
+        UPDATE T_USER
+        set verifyCode = null,register_status = 1
+        where id = #{userId}
+    </update>
+
+    <!--修改客户信息-->
+    <update id="changeUserInfo" parameterType="map">
+        UPDATE T_USER u,T_COMPANY c,T_COMPANY_EMPLOYEE e,T_COMPANY_EMPLOYEE ee,T_DESCRIPTION d
+        SET u.account = #{account},u.password = #{password},u.salt = #{salt},u.real_name = #{realName},u.phone_num = #{phoneNum},u.IDcard = #{IDcard},u.email = #{email},
+            c.name = #{compayname},c.nature = #{nature},c.address = #{address},c.zip_code = #{zip_code},
+            ee.name = #{lename},ee.job_position = #{lejob},ee.office_phone_num = #{leofficephone},ee.cell_phone_num = #{lecellphone},
+            e.name = #{spname},e.job_position = #{spjob},e.office_phone_num = #{spofficephone},e.cell_phone_num = #{spcellphone},e.email = #{spemail},e.fax_num = #{spfaxnum},
+            d.description1 = #{description1},d.description2 = #{description2}
+        WHERE u.id = #{id}
+        AND u.company_id = c.id
+        AND u.designated_contact = e.id
+        AND c.id = ee.company_id
+        AND ee.nature = 1
+        AND u.company_id = d.company_id
+        AND u.association_id = d.association_id
+    </update>
+
+    <!--修改客户信息-->
+    <update id="changeUser" parameterType="map">
+        UPDATE T_USER u,T_COMPANY c,T_COMPANY_EMPLOYEE e,T_COMPANY_EMPLOYEE ee
+        SET u.account = #{account},u.password = #{password},u.salt = #{salt},u.real_name = #{realName},u.phone_num = #{phoneNum},u.IDcard = #{IDcard},u.email = #{email},
+        c.name = #{compayname},c.nature = #{nature},c.address = #{address},c.zip_code = #{zip_code},
+        ee.name = #{lename},ee.job_position = #{lejob},ee.office_phone_num = #{leofficephone},ee.cell_phone_num = #{lecellphone},
+        e.name = #{spname},e.job_position = #{spjob},e.office_phone_num = #{spofficephone},e.cell_phone_num = #{spcellphone},e.email = #{spemail},e.fax_num = #{spfaxnum}
+        WHERE u.id = #{id}
+        AND u.company_id = c.id
+        AND u.designated_contact = e.id
+        AND c.id = ee.company_id
+        AND ee.nature = 1
+    </update>
+
+    <!--根据条件 更新密码-->
+    <update id="updatePasswordByCondition" parameterType="com.oneclouder.pidm.user.model.User">
+        UPDATE T_USER
+        SET password = #{password}, salt = #{salt}, verifycode = NULL
+        WHERE binary account = #{account}
+        AND binary email = #{email}
+        AND binary verifycode = #{verifycode}
+    </update>
+
+    <!--删除一条客户记录-->
+    <update id="deleteUserInfo" parameterType="java.lang.Integer">
+        UPDATE T_USER SET register_status = 3 WHERE id = #{uid}
+    </update>
+
+    <!--插入用户(注意：没有插入注册状态，默认为0)-->
+    <insert id="insert" parameterType="com.oneclouder.pidm.user.model.User">
+        <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+            SELECT
+            LAST_INSERT_ID()
+        </selectKey>
+        insert into T_USER (account, password, salt,
+        phone_num, IDcard, real_name,
+        email ,verifycode , status, association_id,
+        designated_contact, job_position,
+        company_id, frequent_contact, asct_unit_id, approver)
+        values (#{account}, #{password}, #{salt},
+        #{phoneNum}, #{IDcard}, #{realName},
+        #{email} ,#{verifycode} , #{status}, #{associationId},
+        #{designatedContact.id}, #{jobPosition},
+        #{company.id}, #{frequentContact}, #{associationUnit.id}, #{approver})
+    </insert>
+
+    <!--后台添加客户-->
+    <insert id="insertUser" parameterType="com.oneclouder.pidm.user.model.User">
+        <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+            SELECT
+            LAST_INSERT_ID()
+        </selectKey>
+        insert into T_USER (account, password, salt,
+        phone_num, IDcard, real_name,
+        email ,verifycode , status, association_id,
+        designated_contact,register_status, job_position,
+        company_id, frequent_contact, asct_unit_id, approver)
+        values (#{account}, #{password}, #{salt},
+        #{phoneNum}, #{IDcard}, #{realName},
+        #{email} ,#{verifycode} , #{status}, #{associationId},
+        #{designatedContact.id},#{registerStatus}, #{jobPosition},
+        #{company.id}, #{frequentContact}, #{associationUnit.id}, #{approver})
+    </insert>
+
+    <!--批量插入推荐表信息-->
+    <insert id="insertIntroduceds" parameterType="map">
+        INSERT INTO T_INTRODUCED (
+        user_id, com_emp_id
+        ) VALUES
+        <foreach collection="introducedIds" item="introducedId" open="" separator="," close="">
+            <trim prefix="(" suffix=")" suffixOverrides=",">
+            #{userId}, #{introducedId}
+            </trim>
+        </foreach>
+    </insert>
+
+    <!--根据帐号，插入验证码-->
+    <update id="insertVerifycode" parameterType="map">
+        UPDATE T_USER
+        SET verifycode = #{verifycode}
+        WHERE binary account = #{account}
+    </update>
+
+    <!--前台用户更改 信息 根据用户ID 更新用户信息-->
+    <update id="update" parameterType="com.oneclouder.pidm.user.model.User" >
+        update T_USER
+        set
+            phone_num = #{phoneNum,jdbcType=VARCHAR},
+            IDcard = #{IDcard,jdbcType=VARCHAR},
+            real_name = #{realName,jdbcType=VARCHAR},
+            email = #{email,jdbcType=VARCHAR},
+            job_position = #{jobPosition,jdbcType=VARCHAR},
+            asct_unit_id = #{associationUnit.id,jdbcType=INTEGER}
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+
+    <!--更新用户填写过的调查表id-->
+    <update id="updataUserSurveyId" parameterType="map">
+      UPDATE T_USER SET survey_id = #{surveyId} WHERE id = #{id}
+    </update>
+
+    <!--更新所有会员填写过的调查表id-->
+    <update id="updataSurveyId">
+        UPDATE T_USER SET survey_id = NULL WHERE register_status = 2
+    </update>
+
+
+
+</mapper>

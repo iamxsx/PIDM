@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="../../../../dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../../../../dist/css/user/login.css">
+    <title>登录</title>
+</head>
+<body style="background-color: #c0c0c0;">
+<div class="login-main container">
+    <div class="login-box">
+        <div class="login-title">
+            <span style="float:left;">登录</span>
+        </div>
+        <form method="post" action="">
+            <div class="in-account f-field clearfix">
+                <div class="icon-img f-left">
+                    <img src="../../../../imgs/user/dl_yh.png">
+                </div>
+                <div class="f-in f-right">
+                    <input type="text" placeholder="请输入账号">
+                </div>
+            </div>
+            <div class="in-password f-field clearfix">
+                <div class="icon-img f-left">
+                    <img src="../../../../imgs/user/dl_mm.png">
+                </div>
+                <div class="f-in f-right">
+                    <input type="password" placeholder="请输入密码">
+                </div>
+            </div>
+            <div class="in-verifycode f-field clearfix">
+                <div class="icon-img f-left">
+                    <img src="../../../../imgs/user/dl_yzm.png">
+                </div>
+                <div class="f-in-code f-left">
+                    <input type="text" placeholder="请输入验证码">
+                </div>
+                <div class="f-code-img f-right">
+                    <img alt="验证码" src="idCode"/>
+                </div>
+            </div>
+            <div class="l-row clearfix">
+                <div class="f-left">
+                    <input id="ifSave" type="checkbox"/>&nbsp;记住密码
+                </div>
+                <div class="f-right">
+                    <a>忘记密码</a>
+                </div>
+            </div>
+            <div class="l-row clearfix" style="height: auto">
+                <button type="submit" id="login" class="btn btn-primary btn-lg btn-block r-btn">登录</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+</body>
+</html>

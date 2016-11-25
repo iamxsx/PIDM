@@ -1,0 +1,35 @@
+/*分割线*/
+.fengexian{
+    height:1px;border-bottom:1px dashed #000;
+    margin: 10px 0;
+    color: #666;
+}
+
+.name-time-cs{
+    color: #757b86;
+    font-size: 16px;
+}
+
+.content-cs{
+    color: #000;
+    font-size: 16px;
+    min-height: 50px;
+}
+
+.type-status-cs{
+    color: #757b86;
+    font-size: 16px;
+}
+
+#textareaContent{
+    width: 870px;
+    height: 150px;
+    resize: none;
+    margin-top: 10px;
+    margin-bottom: 5px;
+    border-radius: 3px
+}
+
+#title-content-info{
+    background: rgba(113, 117, 122, 0.04);
+}

@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.oneclouder.pidm.communicate.dao.ICommunicateDao" >
+  <resultMap id="BaseResultMap" type="com.oneclouder.pidm.communicate.model.Communicate" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="title" property="title" jdbcType="VARCHAR" />
+    <result column="time" property="time" jdbcType="VARCHAR" />
+    <result column="user_id" property="userId" jdbcType="INTEGER" />
+    <result column="type" property="type" jdbcType="INTEGER" />
+    <result column="status" property="status" jdbcType="INTEGER" />
+    <result column="content" property="content" jdbcType="LONGVARCHAR" />
+
+    <association column="user_id" property="user"
+            select="com.oneclouder.pidm.n_user.dao.INUserDao.findById"/>
+  </resultMap>
+
+  <resultMap id="FormBeanMap" type="com.oneclouder.pidm.communicate.model.FormBean">
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="total" property="total" jdbcType="INTEGER" />
+    <result column="title" property="title" jdbcType="VARCHAR" />
+    <result column="type" property="type" jdbcType="INTEGER" />
+    <result column="companyName" property="companyName" jdbcType="VARCHAR" />
+    <result column="askTime" property="askTime" jdbcType="VARCHAR" />
+    <result column="replyName" property="replyName" jdbcType="VARCHAR" />
+    <result column="replyTime" property="replyTime" jdbcType="VARCHAR" />
+    <result column="replyContent" property="replyContent" jdbcType="VARCHAR" />
+    <result column="status" property="status" jdbcType="INTEGER" />
+    <result column="content" property="content" jdbcType="VARCHAR" />
+  </resultMap>
+
+<!--添加交流项-->
+  <insert id="addCommunicate" parameterType="com.oneclouder.pidm.communicate.model.Communicate">
+    INSERT INTO T_COMMUNICATE (title,content,status,time,user_id,type)
+    VALUES (#{title},#{content},#{status},#{time},#{userId},#{type})
+
+  </insert>
+
+<!--查询交流项-->
+  <select id="findCommunicateByPag" parameterType="map" resultMap="FormBeanMap">
+    SELECT com.id id,com.title,com.content,com.type,c.name companyName,
+                u.real_name askName,com.`TIME` askTime,com.status
+    FROM T_COMMUNICATE com,T_N_USER u,T_N_COMPANY c
+    WHERE u.id=com.user_id AND u.company_id=c.id
+      <if test="column == 'title'">
+        and com.title LIKE '%${text}%'
+      </if>
+      <if test="column == 'type'">
+        and com.type LIKE '%${text}%'
+      </if>
+      <if test="column == 'askName'">
+        and u.real_name LIKE '%${text}%'
+      </if>
+      <if test="column == 'companyName'">
+        and c.name LIKE '%${text}%'
+      </if>
+      <if test="column== 'status'">
+        and com.status LIKE '%${text}%'
+      </if>
+      <if test="column == 'askTime'">
+        and com.time LIKE '%${text}%'
+      </if>
+    limit #{start},#{limit}
+
+  </select>
+  <!--通过reply人和时间查找 交流表-->
+  <select id="findComByReplyPage" parameterType="map" resultMap="FormBeanMap">
+    SELECT com.id id,com.title,com.content,com.type,c.name companyName,u.real_name askName,com.`TIME` askTime,e.real_name replyName,r.`TIME` replyTime,r.content replyContent,com.status
+    FROM T_COMMUNICATE com, T_REPLY r, T_N_USER u, T_N_COMPANY c,T_EMPLOYEE e
+    WHERE r.communicate_id=com.id
+    AND e.id=r.employee_id
+    AND u.id=com.user_id
+    AND u.company_id=c.id
+    <if test="column == 'replyName'">
+      and e.real_name LIKE '%${text}%'
+    </if>
+    <if test="column == 'replyTime'">
+      and r.time LIKE '%${text}%'
+    </if>
+    ORDER BY askTime DESC
+    limit #{start},#{limit}
+  </select>
+
+
+  <select id="getTotal" parameterType="map" resultType="integer">
+    SELECT count(*)
+    FROM (
+        SELECT com.id id,com.title,com.content,com.type,c.name companyName,
+        u.real_name askName,com.`TIME` askTime,com.status
+        FROM T_COMMUNICATE com,T_N_USER u,T_N_COMPANY c
+        WHERE u.id=com.user_id AND u.company_id=c.id
+            <if test="column == 'title'">
+              and com.title LIKE '%${text}%'
+            </if>
+            <if test="column == 'type'">
+              and com.type LIKE '%${text}%'
+            </if>
+            <if test="column == 'askName'">
+              and u.real_name LIKE '%${text}%'
+            </if>
+            <if test="column == 'companyName'">
+              and c.name LIKE '%${text}%'
+            </if>
+            <if test="column== 'status'">
+              and com.status LIKE '%${text}%'
+            </if>
+            <if test="column == 'askTime'">
+              and com.time LIKE '%${text}%'
+            </if>
+    )as a
+  </select>
+
+  <select id="getTotal2" parameterType="map" resultType="integer">
+      SELECT count(*)
+      FROM (
+          SELECT com.id id,com.title,com.content,com.type,c.name companyName,u.real_name askName,com.`TIME` askTime,e.userName replyName,r.`TIME` replyTime,r.content replyContent,com.status
+          FROM T_COMMUNICATE com, T_REPLY r, T_N_USER u, T_N_COMPANY c,T_EMPLOYEE e
+          WHERE r.communicate_id=com.id
+          AND e.id=r.employee_id
+          AND u.id=com.user_id
+          AND u.company_id=c.id
+          <if test="column == 'replyName'">
+            and e.userName LIKE '%${text}%'
+          </if>
+          <if test="column == 'replyTime'">
+            and r.time LIKE '%${text}%'
+          </if>
+          ORDER BY replyName desc
+      )as a
+  </select>
+
+
+  <select id="findCommunicateById" resultMap="BaseResultMap">
+    SELECT * FROM  T_COMMUNICATE
+    WHERE id=#{communicateId}
+  </select>
+
+<!--更改交流项状态为status，0表示为未回复，1表示为问题已回复-->
+  <update id="changeStatus" parameterType="java.lang.Integer">
+    UPDATE T_COMMUNICATE
+    <set>
+      status = #{status}
+    </set>
+    WHERE id=#{communicateId}
+  </update>
+
+  <!--通过用户ID 查找交流表-->
+  <select id="findComByUIdPage" parameterType="map" resultMap="BaseResultMap">
+    SELECT *
+    FROM T_COMMUNICATE
+    WHERE user_id = #{uId}
+    limit #{start},#{limit}
+  </select>
+
+  <select id="getTotal3" parameterType="integer" resultType="integer">
+    SELECT count(*)
+    FROM (
+      SELECT *
+      FROM T_COMMUNICATE
+      WHERE user_id = #{uId}
+    )as a
+  </select>
+
+</mapper>

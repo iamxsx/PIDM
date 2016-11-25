@@ -1,0 +1,280 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+
+    <!--<bean id="lifecycleBeanPostProcessor" class="org.apache.shiro.spring.LifecycleBeanPostProcessor" />-->
+    <!-- shiro的web过滤器 -->
+    <bean id="shiroFilter" class="org.apache.shiro.spring.web.ShiroFilterFactoryBean">
+        <property name="securityManager" ref="securityManager"/>
+        <property name="loginUrl" value="/back/login"/>
+        <property name="successUrl" value="/back/welcome"/>
+        <property name="unauthorizedUrl" value="/back/refuse"/>
+
+        <property name="filters">
+            <map>
+                <entry key="authc" value-ref="captchaFormAuthenticationFilter"/>
+                <entry key="kickout" value-ref="kickoutSessionControlFilter"/>
+            </map>
+        </property>
+
+        <property name="filterChainDefinitions">
+            <value>
+                <!--放行静态资源-->
+                /dist/** = anon
+                /imgs/** = anon
+
+                <!--加了/back链接需要放行的资源，加了/back的链接获取不到前台session-->
+                /back/menu/get-menu = anon
+                /back/menu/get-front-menu = anon
+                /back/menu/getSecondMenu = anon
+                /back/menu/getSecondMenuByMenuName = anon
+
+                /back/article/findArticleBySection = anon
+                /back/article/findArticlesBySecondSection = anon
+                /back/article/getPhototNews = anon
+                /back/article/show-article-detail = anon
+                /back/article/detail/** = anon
+                /back/article/showImage = anon
+                /back/article/download-annex = anon
+                /back/article/article-search = anon
+
+                /communicate/othersCommunicate = anon
+                /communicate/submit-communicate = anon
+                /communicate/myCommunicate = anon
+                /communicate/userDetail = anon
+                /communicate/submit-question = anon
+
+                /back/survey/SurveyInfo = anon
+                /back/survey/statistics = anon
+                /back/survey/isWriteSurvey = anon
+                /back/survey/getSurveyStatus = anon
+
+                /back/code/** = anon
+
+
+
+                <!--权限才能访问的链接-->
+                <!--客户管理-->
+                /back/regmanage/to-regmanage = perms[regmanage:query]
+                /back/user/clientList = perms[client:query]
+                /back/user/clientRecordInfo = perms[client:query]
+                /back/user/getUserSimpleInfoLimit = perms[client:query]
+                /back/user/changeUser = perms[client:update]
+                /back/user/changeclient = perms[client:update]
+                /back/user/deleteUserInfo = perms[client:delete]
+                /back/user/exportPDF = perms[client:export]
+                /back/user/getUserSimpleInfo = perms[client:export]
+                /back/user/getCompany = perms[client:add]
+                /back/user/exist-company = perms[client:add]
+                /back/user/add-user = perms[client:add]
+
+                <!--交流园地管理-->
+                /back/communicate/detail = perms[communicate:query]
+                /back/communicate/showList = perms[communicate:query]
+                /back/communicate/show-communicate-list = perms[communicate:query]
+                /back/communicate/showList = perms[communicate:query]
+                /back/communicate/submit-reply = perms[communicate:reply]
+
+                <!--信息发布-->
+                /back/article/to-publish = perms[article:add]
+                /back/article/save = perms[article:add]
+                /back/article/publish = perms[article:add]
+                /back/article/article-published-list = perms[article-published:query]
+                /back/article/article-reject-list = perms[article-reject:query]
+                /back/article/article-verify-list = perms[article-verify:query]
+                /back/article/article-not-published-list = perms[article-not-published:query]
+
+                <!--工作台-->
+                /back/work/to-do-list = perms[work-wait:query]
+                /back/work/pending = perms[work-done:query]
+
+                <!--部门-->
+                /back/department = perms[department:query]
+                /back/department/getDepartment = perms[department:query]
+                /back/department/updateDept = perms[department:update]
+                /back/department/saveDept = perms[department:add]
+                /back/department/deleteDept = perms[department:delete]
+                <!--岗位-->
+                /back/jobposition = perms[jobposition:query]
+                /back/jobposition/getJobPositionByPage = perms[jobposition:query]
+                /back/jobposition/saveJP = perms[jobposition:add]
+                /back/jobposition/updateJP = perms[jobposition:update]
+                /back/jobposition/deleteJP = perms[jobposition:delete]
+                <!--员工-->
+                /back/employee = perms[employee:query]
+                /back/employee/getEmployee = perms[employee:query]
+                /back/employee/getEmployees = perms[employee:query]
+                /back/employee/saveEmployee = perms[employee:add]
+                /back/employee/updateEmployee = perms[employee:update]
+                /back/employee/deleteEmployee = perms[employee:delete]
+                <!--菜单-->
+                /back/menu = perms[menu:query]
+                /back/menu/updateMenu = perms[menu:update]
+                <!--角色-->
+                /back/role = perms[role:query]
+                /back/role/bindRoleMenus = perms[role:add]
+                /back/role/updateRoleMenus = perms[role:update]
+                /back/role/delete-role = perms[role:delete]
+
+                <!--文件下载-->
+                /back/download-center = perms[download:query]
+                /back/download-center/fileUpload = perms[download:query]
+                /back/download-center/getFileList = perms[download:query]
+                /back/download-center/download = perms[download:query]
+                /back/download-center/delete = perms[download:query]
+
+                <!--调查表-->
+                /back/survey/statisChart = perms[statisChart:query]
+                /back/survey/getSurveyStatus = perms[surveyStatus:update]
+                /back/survey/questionSurvey = perms[questionSurvey:add]
+
+                <!--注销用户-->
+                <!--/logout = logout-->
+
+                <!--登陆才能访问的链接,默认拦截全部含有/back，如果前台需要使用，请添加anon-->
+                /back/** =authc, kickout
+                <!--/back =authc, kickout-->
+                <!--/back/welcome = authc, kickout-->
+                <!--/back/login = authc, kickout-->
+                <!--/back/getCurrentEmployee = authc, kickout-->
+
+                <!--/back/work/** = authc, kickout-->
+                <!--/back/work/to-do-list = authc, kickout-->
+                <!--/back/work/pending = authc, kickout-->
+                <!--/back/work/pending = authc, kickout-->
+                <!--/back/employee/** = authc, kickout-->
+                <!--/back/department/** = authc, kickout-->
+                <!--/back/jobposition/** = authc, kickout-->
+                <!--/back/role/** = authc, kickout-->
+                <!--/back/menu = authc, kickout-->
+                <!--&lt;!&ndash;客户管理&ndash;&gt;-->
+                <!--/back/regmanage/to-regmanage = authc, kickout-->
+                <!--/back/regmanage/to-regActivity = authc, kickout-->
+                <!--/back/user/clientList = authc, kickout-->
+                <!--/back/user/clientRecordInfo = authc, kickout-->
+                <!--/back/user/changeclient = authc, kickout-->
+                <!--/back/user/getCompany = authc, kickout-->
+                <!--/back/user/exist-company = authc, kickout-->
+                <!--&lt;!&ndash;交流&ndash;&gt;-->
+                <!--/back/communicate/showList = authc, kickout-->
+                <!--&lt;!&ndash;信息发布&ndash;&gt;-->
+                <!--/back/article/to-publish = authc, kickout-->
+                <!--/back/article/** = authc, kickout-->
+                <!--/back/article/article-list = authc, kickout-->
+                <!--/back/article/to-publish = authc, kickout-->
+                <!--/back/article/article-published-list = authc, kickout-->
+                <!--/back/article/article-reject-list = authc, kickout-->
+                <!--/back/article/article-verify-list = authc, kickout-->
+                <!--/back/article/article-not-published-list = authc, kickout-->
+                <!--/back/article/edit = authc, kickout-->
+                <!--/back/article/article-preview = authc, kickout-->
+                <!--/back/article/publish = authc, kickout-->
+                <!--/back/article/parseArticle = authc, kickout-->
+
+                <!--&lt;!&ndash;调查表管理&ndash;&gt;-->
+                <!--/back/survey/surveyManage = authc, kickout-->
+                <!--/back/survey/questionSurvey = authc, kickout-->
+                <!--/back/survey/changeSurvey = authc, kickout-->
+                <!--/back/survey/statisChart = authc, kickout-->
+
+                <!--&lt;!&ndash;转跳链接&ndash;&gt;-->
+                <!--/back/client/** = authc, kickout-->
+                <!--/back/communicate/** = authc, kickout-->
+                <!--/back/publish/** = authc, kickout-->
+                <!--/back/work/** = authc, kickout-->
+                <!--/back/download/** = authc, kickout-->
+                <!--/back/system/** = authc, kickout-->
+                <!--/back/survey/** = authc, kickout-->
+
+                <!--&lt;!&ndash;下载管理&ndash;&gt;-->
+                <!--/back/download-center/** = authc, kickout-->
+
+                <!--放行所有匿名访问-->
+                /** = anon
+            </value>
+        </property>
+    </bean>
+
+    <!-- securityManager安全管理器 -->
+    <bean id="securityManager" class="org.apache.shiro.web.mgt.DefaultWebSecurityManager">
+        <property name="realm" ref="customRealm"/>
+        <!--注入会话管理器-->
+        <property name="sessionManager" ref="sessionManager"/>
+        <!--缓存管理器-->
+        <property name="cacheManager" ref="cacheManager"/>
+    </bean>
+
+    <!-- 自定义Realm -->
+    <bean id="customRealm" class="com.oneclouder.pidm.base.shiro.CustomRealm">
+        <property name="credentialsMatcher" ref="credentialsMatcher"/>
+    </bean>
+
+    <!-- 密码匹配 -->
+    <bean id="credentialsMatcher"
+            class="org.apache.shiro.authc.credential.HashedCredentialsMatcher">
+        <property name="hashAlgorithmName" value="md5"/>
+        <property name="hashIterations" value="61"/>
+    </bean>
+
+    <!-- 缓存管理器 -->
+    <bean id="cacheManager" class="org.apache.shiro.cache.ehcache.EhCacheManager">
+        <!--<property name="cacheManagerConfigFile" value="classpath:ehcache.xml"/>-->
+        <property name="cacheManager" ref="ehCacheManager"/>
+    </bean>
+
+    <!-- 会话ID生成器 -->
+    <bean id="sessionIdGenerator" class="org.apache.shiro.session.mgt.eis.JavaUuidSessionIdGenerator"/>
+
+    <!-- 会话Cookie模板 -->
+    <bean id="sessionIdCookie" class="org.apache.shiro.web.servlet.SimpleCookie">
+        <constructor-arg value="sid"/>
+        <property name="httpOnly" value="true"/>
+        <property name="maxAge" value="-1"/>
+    </bean>
+
+    <!--&lt;!&ndash; 会话DAO &ndash;&gt;-->
+    <!--<bean id="sessionDAO" class="org.apache.shiro.session.mgt.eis.EnterpriseCacheSessionDAO">-->
+        <!--<property name="activeSessionsCacheName" value="shiro-activeSessionCache"/>-->
+        <!--<property name="sessionIdGenerator" ref="sessionIdGenerator"/>-->
+    <!--</bean>-->
+
+    <!--&lt;!&ndash; 会话验证调度器 &ndash;&gt;-->
+    <!--<bean id="sessionValidationScheduler" class="org.apache.shiro.session.mgt.quartz.QuartzSessionValidationScheduler">-->
+        <!--<property name="sessionValidationInterval" value="600000"/>-->
+        <!--<property name="sessionManager" ref="sessionManager"/>-->
+    <!--</bean>-->
+
+    <!--会话管理器-->
+    <bean id="sessionManager" class="org.apache.shiro.web.session.mgt.DefaultWebSessionManager">
+        <property name="globalSessionTimeout" value="1800000"/>
+        <property name="deleteInvalidSessions" value="true"/>
+        <!--定期检查失效session-->
+        <!--<property name="sessionValidationSchedulerEnabled" value="true"/>-->
+        <!--<property name="sessionValidationScheduler" ref="sessionValidationScheduler"/>-->
+        <!--<property name="sessionDAO" ref="sessionDAO"/>-->
+        <property name="sessionIdCookieEnabled" value="true"/>
+        <property name="sessionIdCookie" ref="sessionIdCookie"/>
+    </bean>
+
+    <!-- 相当于调用SecurityUtils.setSecurityManager(securityManager) -->
+    <bean class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
+        <property name="staticMethod" value="org.apache.shiro.SecurityUtils.setSecurityManager"/>
+        <property name="arguments" ref="securityManager"/>
+    </bean>
+
+    <bean id="captchaFormAuthenticationFilter"
+          class="com.oneclouder.pidm.base.shiro.CaptchaFormAuthenticationFilter"/>
+
+    <!--并发登陆人数控制-->
+    <bean id="kickoutSessionControlFilter"
+          class="com.oneclouder.pidm.base.shiro.KickoutSessionControlFilter">
+        <property name="cacheManager" ref="cacheManager"/>
+        <property name="sessionManager" ref="sessionManager"/>
+
+        <property name="kickoutAfter" value="false"/>
+        <property name="maxSession" value="1"/>
+        <property name="kickoutUrl" value="/back/login"/>
+    </bean>
+</beans>

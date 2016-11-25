@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.oneclouder.pidm.n_user.dao.INTDatumDao">
+    <resultMap id="BaseResultMap" type="com.oneclouder.pidm.n_user.model.NDatum">
+        <id column="id" property="id"/>
+        <result column="user_id" property="userId"/>
+        <result column="file_url" property="fileUrl"/>
+        <result column="descr" property="descr"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id, user_id, file_url, descr
+    </sql>
+
+    <!--###############查询方法块###############-->
+
+    <!--zif：根据id查询完整的datum信息-->
+    <select id="findById" parameterType="int" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM T_N_TEMP_DATUM
+        WHERE id = #{datumId}
+    </select>
+
+
+    <insert id="insert" parameterType="com.oneclouder.pidm.n_user.model.NDatum">
+        <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+            SELECT
+            LAST_INSERT_ID()
+        </selectKey>
+        INSERT INTO T_N_TEMP_DATUM(
+        user_id, file_url, descr
+        ) VALUES (
+        #{userId}, #{fileUrl}, #{descr}
+        )
+    </insert>
+
+    <update id="update" parameterType="com.oneclouder.pidm.n_user.model.NDatum">
+        UPDATE T_N_TEMP_DATUM SET file_url = #{fileUrl},descr = #{descr} WHERE user_id = #{userId}
+    </update>
+
+    <!--zcb：通过用户查找NDatum对象-->
+    <select id="findByUserId" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM T_N_TEMP_DATUM
+        WHERE user_id = #{nUserId}
+    </select>
+</mapper>

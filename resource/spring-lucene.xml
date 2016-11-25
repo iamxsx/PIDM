@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <!--分词器-->
+    <bean id="luceneAnalyzer" class="org.apache.lucene.analysis.standard.StandardAnalyzer"/>
+
+    <!--索引存储目录-->
+    <bean id="luceneDirectory" class="org.apache.lucene.store.SimpleFSDirectory" destroy-method="close">
+        <constructor-arg>
+            <!--Path path = Paths.get('/home/clouder/xsx');-->
+            <bean class="java.nio.file.Paths" factory-method="get">
+                <constructor-arg index="0" value="/home/clouder/lucene/xsx"/>
+                <constructor-arg index="1"><list></list></constructor-arg>
+            </bean>
+        </constructor-arg>
+    </bean>
+
+
+    <bean id="indexWriterConfig" class="org.apache.lucene.index.IndexWriterConfig">
+        <constructor-arg index="0" ref="luceneAnalyzer"/>
+    </bean>
+
+    <bean id="indexWriter" class="org.apache.lucene.index.IndexWriter"  destroy-method="close">
+        <constructor-arg index="0" ref="luceneDirectory"/>
+        <constructor-arg index="1" ref="indexWriterConfig"/>
+    </bean>
+
+    <bean id="directoryReader" class="org.apache.lucene.index.DirectoryReader" factory-method="open" destroy-method="close">
+        <constructor-arg ref="luceneDirectory"/>
+    </bean>
+
+
+    <bean id="indexSearcher" class="org.apache.lucene.search.IndexSearcher">
+        <constructor-arg type="org.apache.lucene.index.IndexReader" ref="directoryReader"/>
+    </bean>
+
+</beans>

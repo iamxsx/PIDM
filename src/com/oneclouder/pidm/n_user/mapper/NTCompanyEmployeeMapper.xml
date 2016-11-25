@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.oneclouder.pidm.n_user.dao.INTCompanyEmployeeDao">
+    <resultMap id="BaseResultMap" type="com.oneclouder.pidm.n_user.model.NCompanyEmployee">
+        <id column="id" property="id"/>
+        <result column="name" property="name"/>
+        <result column="job_position" property="jobPosition"/>
+        <result column="asct_job_position" property="asctJobPosition"/>
+        <result column="chapter_job_position" property="chapterJobPosition"/>
+        <result column="email" property="email"/>
+        <result column="office_phone_num" property="officePhoneNum"/>
+        <result column="cell_phone_num" property="cellPhoneNum"/>
+        <result column="fax_num" property="faxNum"/>
+        <result column="online_num" property="onlineNum"/>
+        <result column="nature" property="nature"/>
+        <association property="company" column="company_id" javaType="com.oneclouder.pidm.n_user.model.NCompany"
+                     select="com.oneclouder.pidm.n_user.dao.INTCompanyDao.findById"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        id, name, job_position, asct_job_position, chapter_job_position, email,
+        office_phone_num, cell_phone_num, fax_num, online_num, nature, company_id
+    </sql>
+
+    <!--zjf-->
+    <select id="findById" parameterType="int" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM T_N_TEMP_COMPANY_EMPLOYEE
+        WHERE id = #{comEmpId}
+    </select>
+
+    <select id="getCompanyEmployeeByCId" parameterType="int" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM T_N_TEMP_COMPANY_EMPLOYEE
+        WHERE company_id = #{cId}
+    </select>
+
+    <!--zjf-->
+    <insert id="insert" parameterType="com.oneclouder.pidm.n_user.model.NCompanyEmployee">
+        <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+            SELECT
+            LAST_INSERT_ID()
+        </selectKey>
+        INSERT INTO T_N_TEMP_COMPANY_EMPLOYEE
+        (name, job_position, asct_job_position, chapter_job_position, email,
+        office_phone_num, cell_phone_num, fax_num, online_num, nature, company_id)
+        VALUE (#{name}, #{jobPosition}, #{asctJobPosition}, #{chapterJobPosition}, #{email},
+        #{officePhoneNum}, #{cellPhoneNum}, #{faxNum}, #{onlineNum}, #{nature}, #{company.id})
+    </insert>
+
+    <update id="updateTEmployee" parameterType="com.oneclouder.pidm.n_user.model.NCompanyEmployee">
+        UPDATE T_N_TEMP_COMPANY_EMPLOYEE
+        SET name = #{name},job_position = #{jobPosition},asct_job_position = #{asctJobPosition},
+        chapter_job_position = #{chapterJobPosition},email = #{email},
+        office_phone_num = #{officePhoneNum},cell_phone_num = #{cellPhoneNum},
+        fax_num = #{faxNum},online_num = #{onlineNum}
+        WHERE id = #{id}
+    </update>
+
+</mapper>

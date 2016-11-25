@@ -1,0 +1,248 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.oneclouder.pidm.n_user.dao.INUserDao">
+    <resultMap id="BaseResultMap" type="com.oneclouder.pidm.n_user.model.NUser">
+        <id column="id" property="id"/>
+        <result column="account" property="account"/>
+        <result column="password" property="password"/>
+        <result column="salt" property="salt"/>
+        <result column="phone_num" property="phoneNum"/>
+        <result column="IDcard" property="IDcard"/>
+        <result column="real_name" property="realName"/>
+        <result column="email" property="email"/>
+        <result column="verifycode" property="verifycode"/>
+        <result column="status" property="status"/>
+        <result column="user_role" property="userRole"/>
+        <association property="company" column="company_id" javaType="com.oneclouder.pidm.n_user.model.NCompany"
+                     select="com.oneclouder.pidm.n_user.dao.INCompanyDao.findById"/>
+    </resultMap>
+
+    <resultMap id="FindBaseName" type="com.oneclouder.pidm.n_user.model.NUser">
+        <id column="id" property="id"/>
+        <result column="real_name" property="realName"/>
+        <association property="company" column="company_id" javaType="com.oneclouder.pidm.n_user.model.NCompany"
+                     select="com.oneclouder.pidm.n_user.dao.INCompanyDao.findById"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id, account, password, salt, phone_num, IDcard, real_name, email, verifycode, status,
+        company_id, user_role
+    </sql>
+
+    <!--###############查询方法块###############-->
+    <sql id="All_List">
+        u.id, u.account, u.password, u.salt, u.phone_num, u.IDcard, u.real_name, u.email uemail, u.verifycode,u.status,
+        u.company_id,
+        m.identifier, m.name companyName, m.nature mnature, m.address, m.zip_code,
+        m.register_time, m.association_name, m.association_unit, m.chapter_name, m.chapter_unit,
+        m.introduction, m.demand,m.audit_opinion,
+        em.id EmployeeId, em.name desName, em.job_position, em.asct_job_position, em.chapter_job_position, em.email ememail,
+        em.office_phone_num, em.cell_phone_num, em.fax_num, em.online_num, em.nature emnature
+    </sql>
+
+    <!--查询方法块-->
+
+    <!--zif：根据id查询完整的user信息-->
+    <select id="findById" parameterType="int" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM T_N_USER
+        WHERE id = #{userId}
+    </select>
+
+    <!--分页查询-->
+    <select id="getUserSimpleInfoLimit" parameterType="map" resultType="map">
+        SELECT * from
+        (SELECT u.id,em.id eid,u.account,m.name,m.address,em.name desContactName,em.cell_phone_num,em.fax_num,u.email
+        FROM T_N_USER u,T_N_COMPANY m,T_N_COMPANY_EMPLOYEE em
+        WHERE u.company_id = m.id AND u.status = 3 AND em.company_id = m.id AND em.nature = 0 ) AS a
+        WHERE not exists(SELECT 1 FROM
+        (SELECT u.id,em.id eid,u.account,m.name,m.address,em.name desContactName,em.cell_phone_num,em.fax_num,u.email
+        FROM T_N_USER u,T_N_COMPANY m,T_N_COMPANY_EMPLOYEE em
+        WHERE u.company_id = m.id AND u.status = 3 AND em.company_id = m.id AND em.nature = 0 ) AS b
+        WHERE a.name=b.name AND a.eid > b.eid)
+        <if test="searchCondition==0">AND a.account LIKE CONCAT(CONCAT('%', #{keyWord}), '%')</if>
+        <if test="searchCondition==1">AND a.name LIKE CONCAT(CONCAT('%', #{keyWord}), '%')</if>
+        <if test="searchCondition==2">AND a.address LIKE CONCAT(CONCAT('%', #{keyWord}), '%')</if>
+        <if test="searchCondition==3">AND a.name LIKE CONCAT(CONCAT('%', #{keyWord}), '%')</if>
+        <if test="searchCondition==4">AND a.cell_phone_num LIKE CONCAT(CONCAT('%', #{keyWord}), '%')</if>
+        <if test="searchCondition==5">AND a.fax_num LIKE CONCAT(CONCAT('%', #{keyWord}), '%')</if>
+        <if test="searchCondition==6">AND a.email LIKE CONCAT(CONCAT('%', #{keyWord}), '%')</if>
+        ORDER BY a.id DESC
+        <if test="limit != null">
+            LIMIT #{offset},#{limit}
+        </if>
+    </select>
+
+    <!--查询某一客户,公司,指定联系人,推荐人,法人等全部信息-->
+    <select id="selectClientAll" parameterType="java.lang.Integer" resultType="map">
+        SELECT
+        <include refid="All_List"/>
+        FROM T_N_USER u,T_N_COMPANY m,T_N_COMPANY_EMPLOYEE em
+        WHERE u.company_id = m.id AND u.company_id = em.company_id AND u.id = #{uid}
+    </select>
+
+    <insert id="insertUser" parameterType="com.oneclouder.pidm.n_user.model.NUser">
+        <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+            SELECT
+            LAST_INSERT_ID()
+        </selectKey>
+        INSERT INTO T_N_USER(account, password, salt, phone_num, IDcard, real_name, email, verifycode,
+        company_id,status
+        )
+        VALUE (#{account}, #{password}, #{salt}, #{phoneNum}, #{IDcard}, #{realName}, #{email}, #{verifycode},
+        #{company.id},#{status}
+        )
+    </insert>
+
+    <!--zjf:查询账号数目,区分大小写-->
+    <select id="findAccountNum" parameterType="string" resultType="integer">
+        SELECT
+        count(*)
+        FROM T_N_USER
+        WHERE binary account = #{account}
+    </select>
+
+    <!--zjf:根据code查询记录,区分大小写-->
+    <select id="findByCode" parameterType="string" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM T_N_USER
+        WHERE binary verifycode = #{code}
+    </select>
+
+    <!--zjf:根据账号找salt,区分大小写-->
+    <select id="findSaltByAccount" parameterType="string" resultType="string">
+        SELECT
+        salt
+        FROM T_N_USER
+        WHERE binary account = #{account}
+    </select>
+
+    <!--zjf:根据账号和密码,区分大小写-->
+    <select id="findByAccountAndPassword" parameterType="map" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM T_N_USER
+        WHERE binary account = #{account}
+        AND binary password = #{password}
+    </select>
+
+    <!--zjf:根据账号和邮箱统计记录数-->
+    <select id="findByAccountAndEmail" parameterType="map" resultType="integer">
+        SELECT
+        count(*)
+        FROM T_N_USER
+        WHERE binary account = #{account}
+        AND binary email = #{email}
+    </select>
+
+    <!--zjf:根据账号查询user-->
+    <select id="findByAccount" parameterType="string" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM T_N_USER
+        WHERE binary account = #{account}
+    </select>
+
+    <!--zjf:根据账号+邮箱+验证码统计user记录数-->
+    <select id="findNumByAccoAndEmailAndVcode" parameterType="map" resultType="integer">
+        SELECT
+        count(*)
+        FROM T_N_USER
+        WHERE binary account = #{account}
+        AND binary email = #{email}
+        AND binary verifycode = #{verifycode}
+    </select>
+
+    <select id="isWriteSurvey" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+        SELECT survey_id FROM T_N_USER WHERE id = #{id}
+    </select>
+
+    <!--###############插入方法块###############-->
+    <!--zcb：插入用户信息到 临时表-->
+    <insert id="insertToNTempUser" parameterType="com.oneclouder.pidm.n_user.model.NUser">
+        <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+            SELECT
+            LAST_INSERT_ID()
+        </selectKey>
+        insert into T_N_TEMP_USER
+        (account, password,
+        salt, phone_num, IDcard, real_name,
+        email, verifycode, status, company_id)
+        values
+        (#{account}, #{password},
+        #{salt}, #{phoneNum}, #{IDcard},
+        #{realName}, #{email}, #{verifycode},
+        #{status}, #{company.id})
+    </insert>
+
+    <!--zjf：插入user 注意：status默认为0 此处不作插入；-->
+    <insert id="insert" parameterType="com.oneclouder.pidm.n_user.model.NUser">
+        <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+            SELECT
+            LAST_INSERT_ID()
+        </selectKey>
+        INSERT INTO T_N_USER(account, password, salt, phone_num, IDcard, real_name, email, verifycode,
+        company_id
+        )
+        VALUES (#{account}, #{password}, #{salt}, #{phoneNum}, #{IDcard}, #{realName}, #{email}, #{verifycode},
+        #{company.id}
+        )
+    </insert>
+
+
+    <!--###############更新方法块###############-->
+
+    <!--更新方法块-->
+    <update id="deleteUserInfo" parameterType="java.lang.Integer">
+        UPDATE T_N_USER SET status = 4 WHERE  id = #{uid}
+    </update>
+
+    <!--zjf：激活账号 修改status 置空verifycode-->
+    <update id="active" parameterType="integer">
+        UPDATE T_N_USER SET status = 1, verifycode = NULL WHERE id = #{userId}
+    </update>
+
+    <!--zjf:根据账号更新验证码-->
+    <update id="updateVerifycode" parameterType="map">
+        UPDATE T_N_USER
+        SET verifycode = #{verifycode}
+        WHERE binary account = #{account}
+    </update>
+
+    <!--zif:更新密码+盐-->
+    <update id="updatePassword" parameterType="map">
+        UPDATE T_N_USER
+        SET password = #{password}, salt = #{salt}
+        WHERE binary account = #{account}
+    </update>
+
+    <!--zjf:更新验证码-->
+    <update id="updateCodeByAccoAndEmailAndVcode" parameterType="map">
+        UPDATE T_N_USER
+        SET verifycode = NULL
+        WHERE binary account = #{account}
+        AND binary email = #{email}
+        AND binary verifycode = #{verifycode}
+    </update>
+
+    <update id="updateUserInfo" parameterType="com.oneclouder.pidm.n_user.model.NUser">
+        UPDATE T_N_USER
+        SET phone_num = #{phoneNum},IDcard = #{IDcard},real_name = #{realName},email = #{email}
+        WHERE id = #{id}
+    </update>
+
+    <!--更新用户填写过的调查表id-->
+    <update id="updataUserSurveyId" parameterType="map">
+        UPDATE T_N_USER SET survey_id = #{surveyId} WHERE id = #{id}
+    </update>
+
+    <!--更新所有会员填写过的调查表id-->
+    <update id="updataSurveyId">
+        UPDATE T_N_USER SET survey_id = NULL WHERE status = 3
+    </update>
+
+    <!--###############删除方法快###############-->
+
+</mapper>

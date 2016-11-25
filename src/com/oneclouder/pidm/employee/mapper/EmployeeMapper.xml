@@ -1,0 +1,291 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.oneclouder.pidm.employee.dao.IEmployeeDao" >
+  <resultMap id="BaseResultMap" type="com.oneclouder.pidm.employee.model.Employee" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="userName" property="userName" jdbcType="VARCHAR" />
+    <result column="password" property="password" jdbcType="VARCHAR" />
+    <result column="employee_num" property="employeeNum" jdbcType="VARCHAR" />
+    <result column="job_status" property="jobStatus" jdbcType="INTEGER" />
+    <result column="gender" property="gender" jdbcType="INTEGER" />
+    <result column="job_position_id" property="jobPositionId" jdbcType="INTEGER" />
+    <result column="cell_phone_num" property="cellPhoneNum" jdbcType="VARCHAR" />
+    <result column="office_phone_num" property="officePhoneNum" jdbcType="VARCHAR" />
+    <result column="birthday" property="birthday" jdbcType="DATE" />
+    <result column="qq" property="qq" jdbcType="VARCHAR" />
+    <result column="email" property="email" jdbcType="VARCHAR" />
+    <result column="address" property="address" jdbcType="VARCHAR" />
+    <result column="real_name" property="realName" jdbcType="VARCHAR" />
+    <result column="salt" property="salt" jdbcType="VARCHAR" />
+  </resultMap>
+
+  <cache type="org.mybatis.caches.ehcache.LoggingEhcache"/>
+
+  <sql id="Base_Column_List" >
+    id, userName, password, employee_num, job_status, gender, job_position_id, cell_phone_num,
+    office_phone_num, birthday, qq, email, address, real_name, salt
+  </sql>
+
+  <sql id="Multi_Query_List">
+    e.id,e.userName,e.employee_num,e.job_status,e.gender,e.job_position_id,e.cell_phone_num,
+    e.office_phone_num,e.birthday,e.qq,e.email,e.address, e.real_name, e.salt
+  </sql>
+
+  <!--根据手机号查找员工-->
+  <select id="findByPhoneNum" parameterType="java.lang.String" resultMap="BaseResultMap" useCache="false">
+    select
+    <include refid="Base_Column_List"/>
+    from T_EMPLOYEE
+    where cell_phone_num = #{phoneNum}
+  </select>
+
+  <!--根据岗位查找员工个数-->
+  <select id="countByJP" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+    select count(id)
+    from T_EMPLOYEE
+    where job_position_id = #{jpId,jdbcType=INTEGER}
+  </select>
+
+    <!--根据删除员工删除员工角色关联表-->
+  <select id="deleteERByEmp" parameterType="java.lang.Integer">
+    delete from T_EMPLOYEE_ROLE
+    where employee_id = #{employeeId,jdbcType=INTEGER}
+  </select>
+
+  <!--根据员工id和角色id查找是否存在关联-->
+  <select id="findEmpRole" parameterType="java.util.Map" resultType="java.lang.Integer">
+    select role_id
+    from T_EMPLOYEE_ROLE
+    where employee_id = #{employeeId,jdbcType=INTEGER}
+    and role_id = #{roleId,jdbcType=INTEGER}
+  </select>
+
+  <!--根据员工id查找所有角色id-->
+  <select id="findRoleIdByEmp" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+    select role_id
+    from T_EMPLOYEE_ROLE
+    where employee_id = #{employeeId,jdbcType=INTEGER}
+  </select>
+
+  <!--插入员工角色中间表-->
+  <insert id="insertEmpRole" parameterType="java.util.Map">
+    insert into T_EMPLOYEE_ROLE(employee_id, role_id)
+    values(#{employeeId,jdbcType=INTEGER},#{roleId,jdbcType=INTEGER})
+  </insert>
+
+  <!-- 根据用户名查询 -->
+  <select id="findByUserName" resultMap="BaseResultMap" parameterType="java.lang.String" useCache="false">
+    select
+    <include refid="Base_Column_List" />
+    from T_EMPLOYEE
+    where userName = #{userName,jdbcType=VARCHAR}
+  </select>
+
+  <!--根据角色id查找与员工-->
+  <select id="findByRole" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+    select
+    <include refid="Multi_Query_List"/>
+    from T_EMPLOYEE e, T_EMPLOYEE_ROLE er
+    where e.id = er.employee_id and er.role_id = #{roleId,jdbcType=INTEGER}
+  </select>
+
+  <!--根据id查姓名-->
+  <select id="findNameById" resultType="java.lang.String" parameterType="integer">
+    SELECT real_name FROM T_EMPLOYEE
+    WHERE id = #{employee_id}
+  </select>
+
+  <!-- 获取总数 -->
+  <select id="countByDept" resultType="java.lang.Integer" parameterType="java.lang.Integer">
+    select
+    count(e.id)
+    from T_EMPLOYEE e
+    left join T_JOB_POSITION j on(e.job_position_id = j.id)
+    left join T_DEPARTMENT d on(j.department_id = d.id)
+    <where>
+      <if test="deptId != null">
+        d.id = #{deptId,jdbcType=INTEGER}
+      </if>
+    </where>
+  </select>
+
+  <!--根据部门查找员工，如果部门id为null，则查询所有员工-->
+  <select id="findByDept" resultMap="BaseResultMap" parameterType="java.util.Map">
+    select
+    <include refid="Multi_Query_List"/>
+    from T_EMPLOYEE e
+    left join T_JOB_POSITION j on(e.job_position_id = j.id)
+    left join T_DEPARTMENT d on(j.department_id = d.id)
+    <where>
+      <if test="deptId != null">
+        and d.id = #{deptId,jdbcType=INTEGER}
+      </if>
+      <if test="jobStatus != null">
+        and e.job_status = #{jobStatus,jdbcType=INTEGER}
+      </if>
+      <if test="realName != null and !&quot;&quot;.equals(realName.trim())">
+        and e.real_name like "%"#{realName}"%"
+      </if>
+      <if test="userName != null and !&quot;&quot;.equals(userName.trim())">
+        and e.userName like "%"#{userName}"%"
+      </if>
+    </where>
+    order by e.id
+  </select>
+
+  <select id="findById" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from T_EMPLOYEE
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+
+  <delete id="deleteById" parameterType="java.lang.Integer" >
+    delete from T_EMPLOYEE
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+
+  <insert id="insert" parameterType="com.oneclouder.pidm.employee.model.Employee" >
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into T_EMPLOYEE
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="userName != null" >
+        userName,
+      </if>
+      <if test="password != null" >
+        password,
+      </if>
+      <if test="employeeNum != null" >
+        employee_num,
+      </if>
+      <if test="jobStatus != null" >
+        job_status,
+      </if>
+      <if test="gender != null" >
+        gender,
+      </if>
+      <if test="jobPositionId != null" >
+        job_position_id,
+      </if>
+      <if test="cellPhoneNum != null" >
+        cell_phone_num,
+      </if>
+      <if test="officePhoneNum != null" >
+        office_phone_num,
+      </if>
+      <if test="birthday != null" >
+        birthday,
+      </if>
+      <if test="qq != null" >
+        qq,
+      </if>
+      <if test="email != null" >
+        email,
+      </if>
+      <if test="address != null" >
+        address,
+      </if>
+      <if test="realName != null" >
+        real_name,
+      </if>
+      <if test="salt != null" >
+        salt,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="userName != null" >
+        #{userName,jdbcType=VARCHAR},
+      </if>
+      <if test="password != null" >
+        #{password,jdbcType=VARCHAR},
+      </if>
+      <if test="employeeNum != null" >
+        #{employeeNum,jdbcType=VARCHAR},
+      </if>
+      <if test="jobStatus != null" >
+        #{jobStatus,jdbcType=INTEGER},
+      </if>
+      <if test="gender != null" >
+        #{gender,jdbcType=INTEGER},
+      </if>
+      <if test="jobPositionId != null" >
+        #{jobPositionId,jdbcType=INTEGER},
+      </if>
+      <if test="cellPhoneNum != null" >
+        #{cellPhoneNum,jdbcType=VARCHAR},
+      </if>
+      <if test="officePhoneNum != null" >
+        #{officePhoneNum,jdbcType=VARCHAR},
+      </if>
+      <if test="birthday != null" >
+        #{birthday,jdbcType=DATE},
+      </if>
+      <if test="qq != null" >
+        #{qq,jdbcType=VARCHAR},
+      </if>
+      <if test="email != null" >
+        #{email,jdbcType=VARCHAR},
+      </if>
+      <if test="address != null" >
+        #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="realName != null" >
+        #{realName,jdbcType=VARCHAR},
+      </if>
+      <if test="salt != null" >
+        #{salt,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+
+  <update id="update" parameterType="com.oneclouder.pidm.employee.model.Employee" >
+    update T_EMPLOYEE
+    <set >
+      <if test="userName != null" >
+        userName = #{userName,jdbcType=VARCHAR},
+      </if>
+      <if test="password != null" >
+        password = #{password,jdbcType=VARCHAR},
+      </if>
+      <if test="employeeNum != null" >
+        employee_num = #{employeeNum,jdbcType=VARCHAR},
+      </if>
+      <if test="jobStatus != null" >
+        job_status = #{jobStatus,jdbcType=INTEGER},
+      </if>
+      <if test="gender != null" >
+        gender = #{gender,jdbcType=INTEGER},
+      </if>
+      <if test="jobPositionId != null" >
+        job_position_id = #{jobPositionId,jdbcType=INTEGER},
+      </if>
+      <if test="cellPhoneNum != null" >
+        cell_phone_num = #{cellPhoneNum,jdbcType=VARCHAR},
+      </if>
+      <if test="officePhoneNum != null" >
+        office_phone_num = #{officePhoneNum,jdbcType=VARCHAR},
+      </if>
+      <if test="birthday != null" >
+        birthday = #{birthday,jdbcType=DATE},
+      </if>
+      <if test="qq != null" >
+        qq = #{qq,jdbcType=VARCHAR},
+      </if>
+      <if test="email != null" >
+        email = #{email,jdbcType=VARCHAR},
+      </if>
+      <if test="address != null" >
+        address = #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="realName != null" >
+        real_name = #{realName,jdbcType=VARCHAR},
+      </if>
+      <if test="salt != null" >
+        salt = #{salt,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

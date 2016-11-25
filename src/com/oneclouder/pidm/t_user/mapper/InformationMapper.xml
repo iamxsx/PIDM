@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.oneclouder.pidm.t_user.dao.IInformationDao">
+    <resultMap id="BaseResultMap" type="com.oneclouder.pidm.t_user.model.Description_t">
+        <id column="id" property="id"/>
+        <result column="company_id" property="companyId"/>
+        <result column="association_id" property="associationId"/>
+        <result column="description1" property="description1"/>
+        <result column="description2" property="description2"/>
+    </resultMap>
+
+    <resultMap id="UserResultMap" type="com.oneclouder.pidm.t_user.model.User_t">
+        <id column="id" property="id"/>
+        <result column="account" property="account"/>
+        <result column="password" property="password"/>
+        <result column="phone_num" property="phoneNum"/>
+        <result column="IDcard" property="IDcard"/>
+        <result column="real_name" property="realName"/>
+        <result column="email" property="email"/>
+        <result column="status" property="status"/>
+        <result column="association_id" property="associationId"/>
+        <result column="register_status" property="registerStatus"/>
+        <result column="job_position" property="jobPosition"/>
+        <result column="frequent_contact" property="frequentContact"/>
+        <result column="approver" property="approver"/>
+        <association column="designated_contact" property="designatedContact"
+                     javaType="com.oneclouder.pidm.t_user.model.CompanyEmployee_t"
+                     select="com.oneclouder.pidm.t_user.dao.IInformationDao.findempById"/>
+        <association column="company_id" property="company"
+                     javaType="com.oneclouder.pidm.t_user.model.Company_t"
+                     select="com.oneclouder.pidm.t_user.dao.IInformationDao.findComById"/>
+        <association column="asct_unit_id" property="associationUnit"
+                     javaType="com.oneclouder.pidm.t_user.model.AssociationUnit_t"
+                     select="com.oneclouder.pidm.t_user.dao.IInformationDao.findUnitById"/>
+    </resultMap>
+
+    <resultMap id="SimpleResultMap" type="com.oneclouder.pidm.t_user.model.CompanyEmployee_t">
+        <id column="id" property="id"/>
+        <result column="name" property="name"/>
+        <result column="job_position" property="jobPosition"/>
+        <result column="office_phone_num" property="officePhoneNum"/>
+        <result column="cell_phone_num" property="cellPhoneNum"/>
+        <result column="fax_num" property="faxNum"/>
+        <result column="email" property="email"/>
+        <result column="asct_job_position" property="asctJobPosition"/>
+        <result column="nature" property="nature"/>
+        <association column="company_id" property="company" javaType="com.oneclouder.pidm.t_user.model.CompanyEmployee_t"
+                     select="com.oneclouder.pidm.t_user.dao.ICompanyDao.findById"/>
+    </resultMap>
+
+    <resultMap id="AssoResultMap" type="com.oneclouder.pidm.t_user.model.Association_t">
+        <id column="id" property="id"/>
+        <result column="name" property="name"/>
+        <result column="description" property="description"/>
+    </resultMap>
+
+    <resultMap id="ComResultMap" type="com.oneclouder.pidm.t_user.model.Company_t">
+        <id column="id" property="id"/>
+        <result column="identifier" property="identifier"/>
+        <result column="name" property="name"/>
+        <result column="nature" property="nature"/>
+        <result column="city" property="city"/>
+        <result column="county" property="county"/>
+        <result column="address" property="address"/>
+        <result column="zip_code" property="zipCode"/>
+        <result column="internet_site" property="internetSite"/>
+        <result column="fax_num" property="faxNum"/>
+        <result column="register_nature" property="registerNature"/>
+        <result column="industry" property="industry"/>
+        <result column="admin_department" property="adminDepartment"/>
+        <result column="employee_num" property="employeeNum"/>
+        <result column="email" property="email"/>
+    </resultMap>
+
+    <resultMap id="EmpResultMap" type="com.oneclouder.pidm.t_user.model.CompanyEmployee_t">
+        <id column="id" property="id"/>
+        <result column="name" property="name"/>
+        <result column="job_position" property="jobPosition"/>
+        <result column="office_phone_num" property="officePhoneNum"/>
+        <result column="cell_phone_num" property="cellPhoneNum"/>
+        <result column="fax_num" property="faxNum"/>
+        <result column="email" property="email"/>
+        <result column="asct_job_position" property="asctJobPosition"/>
+        <result column="nature" property="nature"/>
+        <association column="company_id" property="company" javaType="com.oneclouder.pidm.t_user.model.CompanyEmployee_t"
+                     select="com.oneclouder.pidm.t_user.dao.IInformationDao.findComById"/>
+    </resultMap>
+
+    <resultMap id="UnitResultMap" type="com.oneclouder.pidm.t_user.model.AssociationUnit_t">
+        <id column="id" property="id"/>
+        <result column="name" property="name"/>
+        <result column="description" property="description"/>
+        <association column="association_id" jdbcType="INTEGER" property="association"
+                     javaType="com.oneclouder.pidm.t_user.model.Association_t" select="com.oneclouder.pidm.t_user.dao.IInformationDao.findAssoById"/>
+    </resultMap>
+
+
+    <sql id="Base_Column_List">
+        id, company_id, association_id, description1, description2
+    </sql>
+
+    <select id="findUnitById" resultType="int" resultMap="UnitResultMap">
+        SELECT
+        *
+        FROM T_ASSOCIATION_UNIT
+        WHERE id = #{id}
+    </select>
+    <select id="findempById" parameterType="int" resultMap="EmpResultMap">
+        SELECT
+        *
+        FROM T_COMPANY_EMPLOYEE
+        WHERE id = #{id}
+    </select>
+    <select id="findemplegById" parameterType="int" resultMap="EmpResultMap">
+        SELECT
+        *
+        FROM T_COMPANY_EMPLOYEE
+        WHERE nature =1 AND company_id = #{id};
+    </select>
+
+    <select id="findComById" parameterType="int" resultMap="ComResultMap">
+        SELECT
+        *
+        FROM T_COMPANY
+        WHERE id = #{id}
+    </select>
+
+    <select id="findAssoById" parameterType="int" resultMap="AssoResultMap">
+        SELECT
+        *
+        FROM T_ASSOCIATION
+        WHERE id = #{id}
+    </select>
+
+    <select id="findtUserpById" parameterType="int" resultMap="UserResultMap" >
+        SELECT
+        *
+        FROM  T_USER_TEMPORARY
+        WHERE id = #{id}
+    </select>
+
+    <select id="findUserIdBytAccount" parameterType="java.lang.String" resultType="java.lang.Integer">
+        SELECT
+        id
+        FROM T_USER
+        WHERE account = #{t_account}
+    </select>
+
+    <select id="findrepById" parameterType="map" resultType="java.lang.Integer" >
+        SELECT
+        company_emp_id
+        FROM  T_COMPANY_ASSOCIATION_REP
+        WHERE company_id = #{cid} and association_id = #{aid}
+    </select>
+    <select id="findDecById" parameterType="map"  resultMap="BaseResultMap" >
+        SELECT *  FROM  T_DESCRIPTION WHERE company_id = #{cid} and association_id = #{aid}
+    </select>
+    <select id="findIntroducedById" parameterType="int" resultType="java.lang.Integer" >
+        SELECT
+        com_emp_id
+        FROM  T_INTRODUCED
+        WHERE user_id = #{id}
+    </select>
+
+
+    <!--<select id="findUnitIdById" parameterType="int" resultType="java.lang.String">-->
+        <!--SELECT-->
+        <!--name-->
+        <!--FROM T_ASSOCIATION_UNIT-->
+        <!--WHERE id = #{id}-->
+    <!--</select>-->
+
+</mapper>

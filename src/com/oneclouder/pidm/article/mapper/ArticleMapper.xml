@@ -1,0 +1,316 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.oneclouder.pidm.article.dao.IArticleDao">
+
+    <resultMap id="BaseResultMap" type="com.oneclouder.pidm.article.model.Article">
+        <id column="Id" property="id" jdbcType="INTEGER"/>
+        <result column="header" property="header" jdbcType="VARCHAR"/>
+        <result column="publish_time" property="publishTime" jdbcType="VARCHAR"/>
+        <result column="is_pic_news" property="isPicNews" jdbcType="INTEGER"/>
+        <result column="poster" property="poster" jdbcType="VARCHAR"/>
+        <result column="status" property="status" jdbcType="INTEGER"/>
+        <result column="type" property="type" jdbcType="INTEGER"></result>
+        <result column="posterDesc" property="posterDesc" jdbcType="VARCHAR"></result>
+        <result column="approver" property="approver" jdbcType="VARCHAR"></result>
+        <association column="location" property="location"
+                     jdbcType="INTEGER"
+                     javaType="com.oneclouder.pidm.menu.model.Menu"
+                     select="com.oneclouder.pidm.menu.dao.IMenuDao.queryMenuById"
+        />
+        <association column="author" property="author"
+                     jdbcType="INTEGER"
+                     javaType="com.oneclouder.pidm.employee.model.Employee"
+                     select="com.oneclouder.pidm.employee.dao.IEmployeeDao.findById"
+        />
+    </resultMap>
+
+    <insert id="saveArticle" parameterType="com.oneclouder.pidm.article.model.Article">
+        <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+            SELECT
+            LAST_INSERT_ID()
+        </selectKey>
+        INSERT INTO T_ARTICLE
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            header,
+            location,
+            author,
+            publish_time,
+            content,
+            status,
+            <if test="isPicNews != null and isPicNews != ''">
+                is_pic_news,
+            </if>
+            <if test="poster != null and poster != ''">
+                poster,
+            </if>
+            <if test="posterDesc != null and posterDesc != ''">
+                posterDesc,
+            </if>
+        </trim>
+        <trim prefix="VALUES (" suffix=")" suffixOverrides=",">
+            #{header},
+            #{location.id,jdbcType=INTEGER},
+            #{author.id,jdbcType=INTEGER},
+            #{publishTime},
+            #{content},
+            #{status},
+            <if test="isPicNews != null and isPicNews != ''">
+                #{isPicNews},
+            </if>
+            <if test="poster != null and poster != ''">
+                #{poster},
+            </if>
+            <if test="posterDesc != null and posterDesc != ''">
+                #{posterDesc},
+            </if>
+        </trim>
+    </insert>
+
+    <update id="updateArticle" parameterType="com.oneclouder.pidm.article.model.Article">
+        UPDATE T_ARTICLE SET
+        header = #{header},
+        location = #{location.id},
+        author = #{author.id},
+        publish_time = #{publishTime},
+        <if test="isPicNews != null and isPicNews != ''">
+            is_pic_news = #{isPicNews},
+        </if>
+        content = #{content},
+        status = #{status},
+        poster = #{poster},
+        posterDesc = #{posterDesc}
+        WHERE id = #{id}
+    </update>
+
+
+    <select id="findArticleById" parameterType="integer" resultMap="BaseResultMap">
+        SELECT * FROM
+          T_ARTICLE
+        WHERE id = #{id}
+    </select>
+
+    <select id="findPublishedArticleById" parameterType="integer" resultMap="BaseResultMap">
+        SELECT * FROM T_ARTICLE WHERE  id = #{id} and status = 3
+    </select>
+
+
+    <select id="findArticlesByPage" parameterType="map" resultMap="BaseResultMap">
+        SELECT *
+        FROM
+        T_ARTICLE ORDER BY publish_time desc
+        limit #{start},#{limit}
+    </select>
+
+    <select id="getTotalArticleCount" resultType="int">
+        SELECT COUNT(*)
+        FROM
+        T_ARTICLE
+    </select>
+
+    <update id="setStatusByArticleId" parameterType="map">
+        UPDATE T_ARTICLE
+          SET status = #{status}
+        WHERE id = #{aid}
+    </update>
+
+
+    <update id="setApprover" parameterType="map">
+        UPDATE T_ARTICLE
+        SET approver = #{approver}
+        WHERE id = #{aid}
+    </update>
+
+
+
+    <select id="findPublishedArticleByPage" parameterType="map" resultMap="BaseResultMap">
+        SELECT * FROM T_ARTICLE
+        WHERE status = 3 and author = #{author}
+        <choose>
+            <when test="column == 'header'">
+                and header LIKE '%${text}%'
+            </when>
+            <when test="column == 'location'">
+                and location LIKE '%${text}%'
+            </when>
+            <when test="column == 'author'">
+                and author LIKE '%${text}%'
+            </when>
+            <when test="column == 'publishTime'">
+                and publishTime LIKE '%${text}%'
+            </when>
+            <when test="column== 'status'">
+                and status LIKE '%${text}%'
+            </when>
+            <when test="column == 'approver'">
+                and approver LIKE '%${text}%'
+            </when>
+        </choose>
+        order by publish_time desc limit #{offset},#{limit}
+    </select>
+
+    <select id="findPublishedArticleCount" parameterType="map" resultType="int">
+        SELECT count(*) FROM T_ARTICLE
+        WHERE status = 3 and author = #{author}
+        <choose>
+            <when test="column == 'header'">
+                and header LIKE '%${text}%'
+            </when>
+            <when test="column == 'location'">
+                and location LIKE '%${text}%'
+            </when>
+            <when test="column == 'author'">
+                and author LIKE '%${text}%'
+            </when>
+            <when test="column == 'publishTime'">
+                and publishTime LIKE '%${text}%'
+            </when>
+            <when test="column== 'status'">
+                and status LIKE '%${text}%'
+            </when>
+            <when test="column == 'approver'">
+                and approver LIKE '%${text}%'
+            </when>
+        </choose>
+    </select>
+
+
+    <select id="findArticleByCondition" parameterType="map" resultMap="BaseResultMap">
+        SELECT * FROM T_ARTICLE WHERE
+        status = 3
+        <choose>
+            <when test="column == 'header'">
+                header LIKE '%${text}%'
+            </when>
+            <when test="column == 'location'">
+                location LIKE '%${text}%'
+            </when>
+            <when test="column == 'author'">
+                author LIKE '%${text}%'
+            </when>
+            <when test="column == 'publishTime'">
+                publishTime LIKE '%${text}%'
+            </when>
+            <when test="column == 'status'">
+                status LIKE '%${text}%'
+            </when>
+            <when test="column == 'approver'">
+                approver LIKE '%${text}%'
+            </when>
+        </choose>
+
+    </select>
+
+    <delete id="deleteArticles" parameterType="list">
+        update T_ARTICLE SET status = 4 where id in (
+            <foreach collection="list" item="id" separator=",">
+                #{id}
+            </foreach>
+        )
+    </delete>
+
+
+    <select id="findArticlesBySection" parameterType="string" resultMap="BaseResultMap">
+        select DISTINCT a.id,a.header,a.publish_time from (
+          select m2.* from T_MENU m1,T_MENU m2 where m1.name = #{sectionName} and m1.id = m2.parent_id
+        )
+        as m ,T_ARTICLE a,T_MENU m3
+        where
+        (a.location = m.id or (m.id = m3.parent_id and a.location = m3.id)) and a.status = 3
+        ORDER BY a.publish_time desc limit 0,10;
+    </select>
+
+    <select id="findArticlesBySecondSection" parameterType="string" resultMap="BaseResultMap">
+         SELECT a.* from T_ARTICLE a,T_MENU m
+         where a.location = m.id and m.name = #{sectionName} and a.status = 3
+         order by a.publish_time desc;
+    </select>
+
+
+    <update id="deletePoster" parameterType="int">
+        UPDATE T_ARTICLE SET poster = NULL,posterDesc = NULL where id = #{aid}
+    </update>
+
+
+    <select id="getCountByStatus" parameterType="map" resultType="int">
+        SELECT COUNT(*) FROM T_ARTICLE WHERE status = #{status} and author = #{author}
+    </select>
+
+    <select id="findArticlesByStatus" parameterType="map" resultMap="BaseResultMap">
+        SELECT * FROM T_ARTICLE
+        WHERE status = #{status} and author = #{author}
+        order by publish_time desc limit #{offset},#{limit}
+    </select>
+
+    <select id="findArticlesByIds" parameterType="list" resultMap="BaseResultMap">
+        SELECT * from T_ARTICLE
+        WHERE id in(
+            <foreach collection="list" item="id" separator=",">
+                #{id}
+            </foreach>
+        )
+    </select>
+
+    <select id="findArticleByMenuId" parameterType="map" resultMap="BaseResultMap">
+        SELECT a.id,a.header,a.author,a.publish_time,a.content,a.poster,a.posterDesc
+        FROM T_ARTICLE a,T_MENU m
+        where
+        a.status = 3 and a.location = m.id and
+        m.id in (
+            <foreach collection="ids" item="id" separator=",">
+                #{id}
+            </foreach>
+        )
+        order by a.publish_time desc
+        limit #{offset},#{limit}
+    </select>
+
+    <select id="findArticleByMenuIdDirectly" parameterType="map" resultMap="BaseResultMap">
+        SELECT a.id,a.header,a.author,a.publish_time,a.content,a.poster,a.posterDesc
+        FROM T_ARTICLE a,T_MENU m
+        where
+        a.status = 3 and a.location = m.id and m.id = #{menuId}
+        order by a.publish_time desc
+        limit #{offset},#{limit}
+    </select>
+
+    <select id="findAssociationArticle" parameterType="map" resultMap="BaseResultMap">
+        SELECT * from T_ARTICLE a,T_MENU m
+        where a.location = m.id and m.name = #{menuName} and m.id= #{menuId} and a.status = 3
+        order by a.publish_time desc limit 0,1;
+    </select>
+
+    <select id="getArticleCountByMenuName" parameterType="map" resultType="int">
+        SELECT count(*) from T_ARTICLE a,T_MENU m
+        where a.status = 3 and a.location = m.id and
+        m.id in (
+        <foreach collection="ids" item="id" separator=",">
+            #{id}
+        </foreach>
+        )
+    </select>
+
+    <select id="getPhototNews"  resultMap="BaseResultMap">
+--         SELECT a.* from T_ARTICLE a,T_MENU m
+--         where a.location = m.id and m.name = '图片新闻' and a.status = 3
+--         order by a.publish_time desc limit 0,3;
+      SELECT * from T_ARTICLE WHERE status = 3 and is_pic_news = 1
+    </select>
+
+    <select id="getCarouselNews" resultMap="BaseResultMap">
+        SELECT a.* from T_ARTICLE a,T_MENU m
+        where a.location = m.id and m.name = '轮播新闻' and a.status = 3
+        order by a.publish_time desc limit 0,3;
+    </select>
+
+
+    <select id="selectAllPublishedArticle" resultMap="BaseResultMap">
+        SELECT * from T_ARTICLE where status =3;
+    </select>
+
+    <select id="findMumbersService" parameterType="map" resultMap="BaseResultMap">
+        SELECT a.* from T_ARTICLE a,T_MENU m
+         where a.location = m.id and m.name = #{sectionName} and a.status = 3
+         order by a.publish_time desc;
+    </select>
+
+</mapper>

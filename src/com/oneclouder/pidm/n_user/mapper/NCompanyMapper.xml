@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.oneclouder.pidm.n_user.dao.INCompanyDao">
+    <resultMap id="BaseResultMap" type="com.oneclouder.pidm.n_user.model.NCompany">
+        <id column="id" property="id"/>
+        <result column="identifier" property="identifier"/>
+        <result column="name" property="name"/>
+        <result column="nature" property="nature"/>
+        <result column="address" property="address"/>
+        <result column="zip_code" property="zipCode"/>
+        <result column="register_time" property="registerTime"/>
+        <result column="association_name" property="associationName"/>
+        <result column="association_unit" property="associationUnit"/>
+        <result column="chapter_name" property="chapterName"/>
+        <result column="chapter_unit" property="chapterUnit"/>
+        <result column="introduction" property="introduction"/>
+        <result column="demand" property="demand"/>
+        <result column="audit_opinion" property="auditOpinion"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id, identifier, name, nature, address, zip_code,
+        register_time, association_name, association_unit, chapter_name, chapter_unit,
+        introduction, demand,audit_opinion
+    </sql>
+
+    <!--查询方法块-->
+
+    <!--zjf：查询整个对象-->
+    <select id="findById" parameterType="int" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM T_N_COMPANY
+        WHERE id = #{companyId}
+    </select>
+
+    <!--zjf：根据单位名称查询数目-->
+    <select id="findComNumByName" parameterType="string" resultType="integer">
+        SELECT
+        count(*)
+        FROM T_N_COMPANY
+        WHERE name = #{companyName}
+    </select>
+
+
+    <!--插入方法块-->
+
+    <!--插公司信息到 临时表-->
+    <insert id="insertToNTempCompany" parameterType="com.oneclouder.pidm.n_user.model.NCompany">
+        <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+            SELECT
+            LAST_INSERT_ID()
+        </selectKey>
+        INSERT INTO T_N_TEMP_COMPANY
+        (name, identifier, nature,address,
+        zip_code, register_time, association_name,
+        association_unit, chapter_name, chapter_unit,
+        introduction, demand, audit_opinion
+        )
+        VALUE (#{name}, #{identifier}, #{nature},#{address},
+        #{zipCode}, #{registerTime}, #{associationName},
+        #{associationUnit}, #{chapterName}, #{chapterUnit},
+        #{introduction}, #{demand}, #{auditOpinion}
+        )
+    </insert>
+
+    <!--zjf：向T_N_COMPANY插入单位注册信息-->
+    <insert id="insert" parameterType="com.oneclouder.pidm.n_user.model.NCompany">
+        <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+            SELECT
+            LAST_INSERT_ID()
+        </selectKey>
+        INSERT INTO T_N_COMPANY
+        (name, identifier, nature,address,
+        zip_code, register_time, association_name,
+        association_unit, chapter_name, chapter_unit,
+        introduction, demand
+        )
+        VALUE (#{name}, #{identifier}, #{nature},#{address},
+        #{zipCode}, #{registerTime}, #{associationName},
+        #{associationUnit}, #{chapterName}, #{chapterUnit},
+        #{introduction}, #{demand}
+        )
+    </insert>
+
+
+
+    <!--更新方法块-->
+    <update id="updateCompanyInfo" parameterType="com.oneclouder.pidm.n_user.model.NCompany">
+        UPDATE T_N_COMPANY
+        SET name = #{name}, nature = #{nature},address = #{address},zip_code = #{zipCode},
+        association_name = #{associationName},association_unit = #{associationUnit},
+        chapter_name = #{chapterName},chapter_unit = #{chapterUnit},
+        introduction = #{introduction},demand = #{demand} WHERE id = #{id}
+    </update>
+
+    <!--删除方法快-->
+
+</mapper>

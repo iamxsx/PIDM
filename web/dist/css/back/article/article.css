@@ -1,0 +1,44 @@
+.annex-desc {
+	margin: 24px 0;
+	border: 1px dashed #d9d9d9;
+	padding: 24px;
+}
+.span-delete {
+	color: #ff5f69;
+}
+.span-delete:hover {
+	color: rgba(255, 95, 105, 0.81);
+	cursor: pointer;
+}
+.show-img {
+	padding: 24px;
+	margin: 24px;
+}
+.article {
+	background-color: #ffffff;
+	box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.16), 0 2px 4px 0 rgba(0, 0, 0, 0.12);
+	padding: 24px;
+	margin: 24px;
+}
+.article-content {
+	background-color: #FFFFFF;
+	box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.16), 0 2px 4px 0 rgba(0, 0, 0, 0.12);
+	padding: 24px;
+	margin:30px 15px 45px;
+}
+.article-content p {
+	line-height: 32px;
+	margin-bottom: 30px;
+	text-indent: 2em;	
+}
+.article-content h4 {
+	font-size:24px;
+	font-weight:800;
+	text-align:center;
+	margin:15px 0 30px;
+}
+
+.article-content span:nth-child(2) {
+	display:block;
+	text-align:center;
+}

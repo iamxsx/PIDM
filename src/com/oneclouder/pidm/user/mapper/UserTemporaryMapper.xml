@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.oneclouder.pidm.user.dao.IUserTemporaryDao">
+    <resultMap id="BaseResultMap" type="com.oneclouder.pidm.user.model.UserTemporary">
+        <id column="id" property="id"/>
+        <result column="account" property="account"/>
+        <result column="password" property="password"/>
+        <result column="phone_num" property="phoneNum"/>
+        <result column="IDcard" property="IDcard"/>
+        <result column="real_name" property="realName"/>
+        <result column="email" property="email"/>
+        <result column="status" property="status"/>
+        <result column="association_id" property="associationId"/>
+        <result column="register_status" property="registerStatus"/>
+        <result column="job_position" property="jobPosition"/>
+        <result column="frequent_contact" property="frequentContact"/>
+        <result column="approver" property="approver"/>
+        <association column="designated_contact" property="designatedContact"
+                     javaType="com.oneclouder.pidm.user.model.CompanyEmployee"
+                     select="com.oneclouder.pidm.user.dao.ICompanyEmployeeDao.findById"/>
+        <association column="company_id" property="company"
+                     javaType="com.oneclouder.pidm.user.model.Company"
+                     select="com.oneclouder.pidm.user.dao.ICompanyDao.findById"/>
+        <association column="asct_unit_id" property="associationUnit"
+                     javaType="com.oneclouder.pidm.user.model.AssociationUnit"
+                     select="com.oneclouder.pidm.user.dao.IAssociationUnitDao.findById"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id, account, password, phone_num, IDcard, real_name, email, status, association_id,
+        register_status, job_position, frequent_contact, designated_contact, company_id,
+        asct_unit_id, approver
+    </sql>
+
+    <!--把用户信息插入到 临时表里面-->
+    <insert id="insertById" parameterType="com.oneclouder.pidm.user.model.User">
+        <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+            SELECT
+            LAST_INSERT_ID()
+        </selectKey>
+        insert into T_USER_TEMPORARY (account, password,
+        phone_num, IDCard, real_name,
+        email, status, association_id,
+        designated_contact, job_position,
+        company_id, frequent_contact, asct_unit_id, approver)
+        values (#{account}, #{password},
+        #{phoneNum}, #{IDcard}, #{realName},
+        #{email}, #{status}, #{associationId},
+        #{designatedContact.id}, #{jobPosition},
+        #{company.id}, #{frequentContact}, #{associationUnit.id}, #{approver})
+    </insert>
+    <!--通过ID 查找 临时表-->
+    <select id="findUserTemporaryById" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM T_USER_TEMPORARY
+        WHERE id = #{userTemporaryId}
+
+    </select>
+    <!--把用户修改的信息 更新到用户里面-->
+    <update id="updateTemporaryToUser" parameterType="map">
+        UPDATE T_USER
+        SET real_name = #{realName},phone_num = #{phoneNum},
+            IDcard = #{IDcard},email = #{email},designated_contact = #{designatedContact}
+        WHERE id = #{uId}
+    </update>
+    <!--通过临时表的帐号 查找对应正式表 用户的ID -->
+    <select id="findUIdByTemporaryAccount" parameterType="string" resultType="int">
+        SELECT id
+        FROM T_USER
+        WHERE account = #{account}
+
+    </select>
+
+    <select id="findCountOfCompany" parameterType="int" resultType="int">
+        SELECT COUNT(*)
+        FROM T_USER
+        WHERE company_id = #{companyId}
+    </select>
+
+    <!--前台用户更改 信息 根据用户ID 更新用户信息-->
+    <update id="update" parameterType="com.oneclouder.pidm.user.model.UserTemporary" >
+        update T_USER_TEMPORARY
+        set
+            phone_num = #{phoneNum,jdbcType=VARCHAR},
+            IDcard = #{IDcard,jdbcType=VARCHAR},
+            real_name = #{realName,jdbcType=VARCHAR},
+            email = #{email,jdbcType=VARCHAR},
+            job_position = #{jobPosition,jdbcType=VARCHAR},
+            asct_unit_id = #{associationUnit.id,jdbcType=INTEGER}
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+
+    <!--更新描述表-->
+    <update id="updateDescription" parameterType="com.oneclouder.pidm.user.model.Description">
+        UPDATE T_DESCRIPTION
+        SET
+            description1 = #{description1},
+            description2 = #{description2}
+        where
+            id = #{id}
+    </update>
+
+
+</mapper>

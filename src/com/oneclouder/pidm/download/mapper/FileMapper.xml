@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.oneclouder.pidm.download.dao.FileDao">
+    <resultMap id="BaseResultMap" type="com.oneclouder.pidm.download.model.FileModel">
+        <id column="Id" property="id" jdbcType="INTEGER"/>
+        <result column="fileName" property="fileName" jdbcType="VARCHAR"/>
+        <result column="fileUrl" property="fileUrl" jdbcType="VARCHAR"/>
+        <result column="uploadTime" property="uploadTime" jdbcType="VARCHAR"/>
+        <result column="description" property="description" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <insert id="saveFile" parameterType="com.oneclouder.pidm.download.model.FileModel">
+        INSERT INTO T_UPLOAD_FILE (fileName,fileUrl,description,uploadTime) VALUES (
+          #{fileName},#{fileUrl},#{description},#{uploadTime}
+        )
+    </insert>
+
+
+    <select id="getFileList" parameterType="map" resultMap="BaseResultMap">
+        SELECT * from T_UPLOAD_FILE
+        ORDER BY uploadTime desc
+        limit #{offset},#{limit}
+    </select>
+
+    <select id="getFileCount" resultType="int">
+        SELECT count(*) from T_UPLOAD_FILE
+    </select>
+
+    <delete id="deleteFile">
+        DELETE FROM T_UPLOAD_FILE WHERE id = #{id}
+    </delete>
+
+</mapper>

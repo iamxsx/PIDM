@@ -1,0 +1,183 @@
+@charset "UTF-8";
+
+*{
+    margin: 0;
+    padding: 0;
+}
+
+input[type=text]:focus, input[type=password]:focus {
+    outline: 0;
+    -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075), 0 0 8px rgba(102, 175, 233, .6);
+    box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075), 0 0 8px rgba(102, 175, 233, .6)
+}
+
+div {
+    box-sizing: border-box;
+}
+
+.font-x {
+    color: red;
+}
+
+.re-main {
+    margin: 100px auto 100px auto;
+}
+
+.my-form-control {
+    /*border-color: #66afe9;*/
+}
+
+.progress {
+    margin: 10px 0px;
+    height: 15px;
+    background-color: #ccc;
+}
+
+.progress-box {
+    margin: 20px auto;
+    width: 650px;
+    height: 50px;
+    position: relative;
+}
+
+.progress-box li {
+    list-style: none;
+    width: 25%;
+    height: 100%;
+    text-align: center;
+    display: inline-block;
+}
+
+.step1-icn, .step2-icn, .step3-icn, .step4-icn {
+    position: absolute;
+    width: 25px;
+    height: 25px;
+    border-radius: 12px;
+    text-align: center;
+    line-height: 25px;
+    background-color: #ccc;
+    top: -5px;
+}
+
+.curr-index {
+    background-color: #428bca;
+}
+
+.step1-icn {
+    left: 10.5%;
+}
+.step2-icn {
+    left: 35.5%;
+}
+.step3-icn {
+    left: 60.5%;
+}
+.step4-icn {
+    left: 85.5%;
+}
+
+.step1-icn em, .step2-icn em, .step3-icn em, .step4-icn em {
+    color: #FFFFFF;
+    font-weight: bold;
+    font-style: normal;
+}
+
+.form-box {
+    width: 500px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.center {
+    text-align: center;
+    /*color: #A0CD4E;*/
+}
+
+.my-row {
+    padding: 5px 0;
+    height: 50px;
+}
+
+.my-sm-row h6 {
+    margin: 0 0 0 30%;
+    height: 18px;
+    line-height:18px;
+}
+
+.left {
+    float: left;
+}
+
+.right {
+    float: right;
+}
+
+.field, .field-value {
+    vertical-align: middle;
+    line-height:40px;
+    height: 40px;
+}
+
+.field {
+    width: 30%;
+    text-align: center;
+}
+
+.field label {
+    margin: 0;
+    font-weight: normal;
+}
+
+.field-value {
+    width: 70%;
+}
+
+.field-value input {
+    box-sizing: border-box;
+    border: 1px solid #c0c0c0;
+    border-radius: 2px;
+    height: 35px;
+    padding-left: 15px;
+    width: 80%;
+}
+
+.vcode input{
+    width: 40%;
+}
+
+.vcode img {
+    display: inline-block;
+    margin-left: 25px;
+    width: 100px;
+    height: 35px;
+}
+
+.vcode a {
+    display: inline-block;
+    margin-left: 25px;
+    width: 100px;
+    height: 35px;
+}
+
+.form-btn {
+    display: block;
+    margin: 10px auto;
+}
+
+.msg {
+    line-height: 40px;
+    text-align: center;
+}
+
+.msgs1 {
+    background: #E6E6E6;
+    color: #818080;
+}
+
+.full {
+    height: 40px;
+}
+
+.max-full {
+    height: 125px;
+}

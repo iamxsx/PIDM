@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.oneclouder.pidm.system.dao.IRoleDao">
+
+    <resultMap id="BaseResultMap" type="com.oneclouder.pidm.system.model.Role">
+        <id column="rid" property="id" jdbcType="INTEGER"/>
+        <result column="rname" property="name" jdbcType="VARCHAR"/>
+        <result column="status" property="status" jdbcType="INTEGER"/>
+        <result column="rlocation" property="location" jdbcType="INTEGER"/>
+        <collection property="menus"
+                    resultMap="com.oneclouder.pidm.menu.dao.IMenuDao.BaseResultMap"/>
+    </resultMap>
+
+    <select id="findByName" parameterType="java.lang.String" resultType="java.lang.Integer">
+        select r.id rid
+        from T_ROLE r
+        where r.name = #{name}
+    </select>
+
+    <select id="findRoles" resultMap="BaseResultMap">
+      SELECT
+      r.id as rid,r.name as rname,r.location as rlocation,
+      m.id,m.name,m.url
+      from T_ROLE r,T_MENU m,T_ROLE_MENU rm
+      where rm.role_id = r.id and rm.menu_id = m.id
+    </select>
+
+    <select id="getRoleCount" resultType="int">
+        SELECT count(*)
+        from T_ROLE r;
+    </select>
+
+    <insert id="addRole" parameterType="com.oneclouder.pidm.system.model.Role">
+        <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+            SELECT
+            LAST_INSERT_ID()
+        </selectKey>
+        INSERT INTO T_ROLE (name,location)
+        VALUES (#{name},#{location})
+    </insert>
+
+    <insert id="bindRoleMenus" parameterType="map">
+        INSERT INTO T_ROLE_MENU (role_id,menu_id)
+        VALUES
+        <foreach collection="ids" item="item" separator=",">
+            (#{roleId},#{item})
+        </foreach>
+    </insert>
+
+    <delete id="deleteRole" parameterType="int">
+        DELETE FROM T_ROLE where id = #{id};
+    </delete>
+
+    <delete id="deleteRoleMenus" parameterType="int">
+        DELETE FROM T_ROLE_MENU WHERE
+        role_id = #{roleId}
+    </delete>
+
+    <update id="updateRoleMenus" parameterType="map">
+        INSERT INTO T_ROLE_MENU(role_id,menu_id) VALUES
+        <foreach collection="ids" item="item" separator=",">
+            (#{roleId},#{item})
+        </foreach>
+    </update>
+
+    <update id="updateRoleName" parameterType="map">
+        UPDATE T_ROLE SET name = #{roleName} where id = #{roleId}
+    </update>
+
+
+</mapper>

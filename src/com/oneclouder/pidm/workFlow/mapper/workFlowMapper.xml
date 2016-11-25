@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.oneclouder.pidm.workFlow.dao.IWorkFlowDao">
+
+    <update id="setStatusByUserId" parameterType="map">
+        UPDATE T_N_USER
+          SET status = #{status}
+        WHERE id = #{uid}
+    </update>
+
+    <update id="setApprover" parameterType="map">
+        UPDATE T_USER
+        SET approver = #{approver}
+        WHERE id = #{uid}
+    </update>
+
+    <update id="setStatusByUserTEMId" parameterType="map">
+        UPDATE T_N_TEMP_USER
+        SET status = #{status}
+        WHERE id = #{uid}
+    </update>
+
+    <update id="setApproverTME" parameterType="map">
+        UPDATE T_USER_TEMPORARY
+        SET approver = #{approver}
+        WHERE id = #{uid}
+    </update>
+    
+    <update id="setRegisterstatus" parameterType="int">
+        UPDATE T_USER
+        SET register_status = 2
+        WHERE id = #{id}
+    </update>
+
+    <select id="findMessage" parameterType="String" resultType="String">
+        SELECT MESSAGE_
+        FROM ACT_HI_COMMENT
+        WHERE TASK_ID_ = #{id}
+        and ACTION_ = 'AddComment' ORDER BY TIME_ DESC LIMIT 1;
+    </select>
+
+    <update id="setMessageByUserId" parameterType="map">
+        UPDATE T_N_COMPANY
+        SET audit_opinion = #{message}
+        WHERE id = #{companyId}
+    </update>
+
+    <update id="setMessageByTEMPUserId" parameterType="map">
+        UPDATE T_N_TEMP_COMPANY
+        SET audit_opinion = #{message}
+        WHERE id = #{companyId}
+    </update>
+
+    <update id="setUserRole" parameterType="map">
+        UPDATE T_N_USER
+        SET user_role = #{userRole}
+        WHERE id = #{uid}
+    </update>
+
+    <select id="selectRoleId" parameterType="String" resultType="int">
+        SELECT id from T_ROLE WHERE name = #{roleName};
+    </select>
+
+    <select id="selectTUserAccount" parameterType="int" resultType="String">
+        SELECT account from T_N_TEMP_USER WHERE id=#{userId}
+    </select>
+
+    <select id="selectUserId" parameterType="String" resultType="int">
+        SELECT id FROM T_N_USER WHERE account=#{accont}
+    </select>
+
+    <select id="selectCompID" parameterType="int" resultType="int">
+        SELECT company_id FROM T_N_USER WHERE id =#{uid}
+    </select>
+
+    <select id="selectTEMPCompID" parameterType="int" resultType="int">
+        SELECT company_id FROM T_N_TEMP_USER WHERE id =#{uid}
+    </select>
+
+
+</mapper>

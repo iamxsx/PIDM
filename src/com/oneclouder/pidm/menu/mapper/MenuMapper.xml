@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.oneclouder.pidm.menu.dao.IMenuDao">
+    <resultMap id="BaseResultMap" type="com.oneclouder.pidm.menu.model.Menu" >
+        <id column="id" property="id" jdbcType="INTEGER" />
+        <result column="name" property="name" jdbcType="VARCHAR" />
+        <result column="url" property="url" jdbcType="VARCHAR" />
+        <result column="order_num" property="orderNum" jdbcType="INTEGER" />
+        <result column="parent_id" property="parentId" jdbcType="INTEGER" />
+        <result column="status" property="status" jdbcType="INTEGER" />
+        <result column="privilege" property="privilege" jdbcType="INTEGER" />
+        <result column="location" property="location" jdbcType="INTEGER" />
+        <result column="is_hidden" property="isHidden" jdbcType="INTEGER"></result>
+        <result column="open_way" property="openWay" jdbcType="INTEGER"></result>
+        <result column="icon" property="icon"></result>
+        <result column="canPublish" property="canPublish"></result>
+        <result column="order_num" property="orderNum"/>
+    </resultMap>
+
+    <!--<cache type="org.mybatis.caches.ehcache.LoggingEhcache" />-->
+
+    <sql id="Base_Column_List">
+        id, name, url, order_num, parent_id, status, privilege, location, icon
+    </sql>
+
+    <!--获取不重复值-->
+    <sql id="Multi_Column_List" >
+        distinct m.id, m.name, m.url, m.order_num, m.parent_id, m.status, m.privilege, m.location, m.icon
+    </sql>
+
+    <!-- 根据父菜单查找子菜单 -->
+    <select id="findMenuByParent" resultMap="BaseResultMap" parameterType="java.util.Map">
+        select
+        <include refid="Base_Column_List" />
+        from T_MENU
+        <where>
+            <if test="parentId != null">
+                and parent_id = #{parentId,jdbcType=INTEGER}
+            </if>
+            <if test="parentId == null">
+                and parent_id is null
+            </if>
+        </where>
+        and location = #{location,jdbcType=INTEGER}
+        order by id
+    </select>
+
+    <!--根据用户查找权限-->
+    <select id="findMenuByEmployee" resultMap="BaseResultMap" parameterType="java.util.Map">
+        select
+            <include refid="Multi_Column_List"/>
+        from
+            T_EMPLOYEE_ROLE er
+            right join T_ROLE_MENU rm on (er.role_id = rm.role_id)
+            right join T_MENU m on (m.id = rm.menu_id)
+        where
+            er.employee_id = #{employeeId,jdbcType=INTEGER}
+        and m.location = #{location,jdbcType=INTEGER}
+        order by m.order_num
+    </select>
+
+
+    <!--查询一级菜单-->
+    <select id="queryLevel1Menu" resultMap="BaseResultMap">
+        SELECT
+        id,name,url
+        FROM T_MENU
+        WHERE parent_id IS NULL AND location = 1 and canPublish = 0
+    </select>
+
+    <!--查询次级菜单-->
+    <select id="querySecondMenu" parameterType="integer" resultMap="BaseResultMap">
+        SELECT
+        M2.id,M2.name,M2.url
+        FROM T_MENU M1,T_MENU M2
+        WHERE M1.id = M2.parent_id and M1.id = #{parentId} and M2.canPublish = 0
+    </select>
+
+    <select id="queryMenuById" parameterType="integer" resultType="com.oneclouder.pidm.menu.model.Menu">
+        SELECT *
+        FROM T_MENU
+        WHERE id = #{id}
+    </select>
+
+    <select id="queryFrontMenu" resultMap="BaseResultMap">
+        SELECT
+        id,name,url,parent_id,is_hidden,open_way,icon,canPublish,order_num
+        FROM T_MENU
+        WHERE location = 1 and is_hidden = 1 order by order_num
+    </select>
+
+    <select id="queryBackMenu" resultMap="BaseResultMap">
+        SELECT
+        id,name,url,parent_id,is_hidden,open_way,icon,canPublish,order_num
+        FROM T_MENU
+        WHERE location = 2
+        order by id
+    </select>
+
+    <select id="queryPrivilegeMenu" resultMap="BaseResultMap">
+        SELECT
+        id,name,url,parent_id,is_hidden,open_way,icon,canPublish
+        FROM T_MENU
+        WHERE location = 3
+    </select>
+
+    <select id="findMenusByRoleId" parameterType="int" resultMap="BaseResultMap">
+      SELECT m.*
+      from T_ROLE_MENU rm,T_MENU m
+      WHERE rm.role_id = #{roleId} and rm.menu_id = m.id;
+    </select>
+
+    <update id="updateMenu" parameterType="map">
+        update T_MENU set
+        name = #{name},
+        url = #{url},
+        canPublish = #{canPublish},
+        is_hidden = #{isHidden}
+        <if test="icon != null and icon != ''">
+            ,icon = #{icon}
+        </if>
+        WHERE id = #{id}
+    </update>
+
+    <select id="getSecondMenuIds" parameterType="int" resultType="string">
+      -- 调用函数
+        select querySecondMenu(#{menuId});
+    </select>
+
+    <select id="getSecondMenu" parameterType="list" resultMap="BaseResultMap">
+      SELECT * FROM T_MENU where id in (
+        <foreach collection="list" item="id" separator=",">
+            #{id}
+        </foreach>
+      )
+    </select>
+
+    <select id="getSecondMenuByMenuName" parameterType="string" resultMap="BaseResultMap">
+        select M1.id,M1.name,M1.url from T_MENU M1,T_MENU M2
+        WHERE M1.parent_id = M2.id AND M2.name = #{menuName} and M1.location=1;
+    </select>
+
+</mapper>

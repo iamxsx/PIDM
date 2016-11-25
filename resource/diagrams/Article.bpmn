@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:activiti="http://activiti.org/bpmn" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC" xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI" typeLanguage="http://www.w3.org/2001/XMLSchema" expressionLanguage="http://www.w3.org/1999/XPath" targetNamespace="http://www.activiti.org/test">
+  <process id="Article" name="Article" isExecutable="true">
+    <extensionElements>
+      <activiti:executionListener event="end" class="com.oneclouder.pidm.workFlow.listener.PublishEndListenerImpl"></activiti:executionListener>
+    </extensionElements>
+    <startEvent id="startevent2" name="Start"></startEvent>
+    <userTask id="task1" name="采编" activiti:assignee="${user}">
+      <extensionElements>
+        <activiti:taskListener event="complete" class="com.oneclouder.pidm.workFlow.listener.PublishStartListenerImpl"></activiti:taskListener>
+      </extensionElements>
+    </userTask>
+    <sequenceFlow id="flow7" sourceRef="startevent2" targetRef="task1"></sequenceFlow>
+    <userTask id="task2" name="责任主编">
+      <extensionElements>
+        <activiti:taskListener event="create" class="com.oneclouder.pidm.workFlow.listener.PublishTaskListenerImpl"></activiti:taskListener>
+      </extensionElements>
+    </userTask>
+    <sequenceFlow id="flow1" sourceRef="task1" targetRef="task2"></sequenceFlow>
+    <userTask id="task3" name="执行主编">
+      <extensionElements>
+        <activiti:taskListener event="create" class="com.oneclouder.pidm.workFlow.listener.PublishTaskTwoListenerImpl"></activiti:taskListener>
+      </extensionElements>
+    </userTask>
+    <sequenceFlow id="flow2" name="同意" sourceRef="task2" targetRef="task3">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${message=='通过'}]]></conditionExpression>
+    </sequenceFlow>
+    <userTask id="task4" name="主编">
+      <extensionElements>
+        <activiti:taskListener event="create" class="com.oneclouder.pidm.workFlow.listener.PublishTaskThrListenerImpl"></activiti:taskListener>
+      </extensionElements>
+    </userTask>
+    <sequenceFlow id="flow3" name="同意" sourceRef="task3" targetRef="task4">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${message=='通过'}]]></conditionExpression>
+    </sequenceFlow>
+    <endEvent id="endevent2" name="End"></endEvent>
+    <sequenceFlow id="flow11" sourceRef="task4" targetRef="endevent2"></sequenceFlow>
+    <sequenceFlow id="flow4" name="驳回" sourceRef="task4" targetRef="task3">
+      <extensionElements>
+        <activiti:executionListener event="take" class="com.oneclouder.pidm.workFlow.listener.PublishTakeThrListenerImpl"></activiti:executionListener>
+      </extensionElements>
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${message=='驳回'}]]></conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="flow5" name="驳回" sourceRef="task3" targetRef="task2">
+      <extensionElements>
+        <activiti:executionListener event="take" class="com.oneclouder.pidm.workFlow.listener.PublishTakeTwoListenerImpl"></activiti:executionListener>
+      </extensionElements>
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${message=='驳回'}]]></conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="flow6" name="驳回" sourceRef="task2" targetRef="task1">
+      <extensionElements>
+        <activiti:executionListener event="take" class="com.oneclouder.pidm.workFlow.listener.PublishTakeListenerImpl"></activiti:executionListener>
+      </extensionElements>
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${message=='驳回'}]]></conditionExpression>
+    </sequenceFlow>
+  </process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_Article">
+    <bpmndi:BPMNPlane bpmnElement="Article" id="BPMNPlane_Article">
+      <bpmndi:BPMNShape bpmnElement="startevent2" id="BPMNShape_startevent2">
+        <omgdc:Bounds height="35.0" width="35.0" x="152.0" y="80.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="task1" id="BPMNShape_task1">
+        <omgdc:Bounds height="55.0" width="105.0" x="232.0" y="70.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="task2" id="BPMNShape_task2">
+        <omgdc:Bounds height="55.0" width="105.0" x="381.0" y="70.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="task3" id="BPMNShape_task3">
+        <omgdc:Bounds height="55.0" width="105.0" x="381.0" y="180.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="task4" id="BPMNShape_task4">
+        <omgdc:Bounds height="55.0" width="105.0" x="232.0" y="180.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="endevent2" id="BPMNShape_endevent2">
+        <omgdc:Bounds height="35.0" width="35.0" x="152.0" y="190.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge bpmnElement="flow7" id="BPMNEdge_flow7">
+        <omgdi:waypoint x="187.0" y="97.0"></omgdi:waypoint>
+        <omgdi:waypoint x="232.0" y="97.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow1" id="BPMNEdge_flow1">
+        <omgdi:waypoint x="337.0" y="97.0"></omgdi:waypoint>
+        <omgdi:waypoint x="381.0" y="97.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow2" id="BPMNEdge_flow2">
+        <omgdi:waypoint x="433.0" y="125.0"></omgdi:waypoint>
+        <omgdi:waypoint x="433.0" y="180.0"></omgdi:waypoint>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="14.0" width="100.0" x="439.0" y="139.0"></omgdc:Bounds>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow3" id="BPMNEdge_flow3">
+        <omgdi:waypoint x="381.0" y="207.0"></omgdi:waypoint>
+        <omgdi:waypoint x="337.0" y="207.0"></omgdi:waypoint>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="14.0" width="100.0" x="351.0" y="211.0"></omgdc:Bounds>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow11" id="BPMNEdge_flow11">
+        <omgdi:waypoint x="232.0" y="207.0"></omgdi:waypoint>
+        <omgdi:waypoint x="187.0" y="207.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow4" id="BPMNEdge_flow4">
+        <omgdi:waypoint x="284.0" y="235.0"></omgdi:waypoint>
+        <omgdi:waypoint x="284.0" y="275.0"></omgdi:waypoint>
+        <omgdi:waypoint x="433.0" y="274.0"></omgdi:waypoint>
+        <omgdi:waypoint x="433.0" y="235.0"></omgdi:waypoint>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="14.0" width="100.0" x="330.0" y="259.0"></omgdc:Bounds>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow5" id="BPMNEdge_flow5">
+        <omgdi:waypoint x="486.0" y="207.0"></omgdi:waypoint>
+        <omgdi:waypoint x="523.0" y="206.0"></omgdi:waypoint>
+        <omgdi:waypoint x="523.0" y="98.0"></omgdi:waypoint>
+        <omgdi:waypoint x="486.0" y="97.0"></omgdi:waypoint>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="14.0" width="100.0" x="529.0" y="154.0"></omgdc:Bounds>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow6" id="BPMNEdge_flow6">
+        <omgdi:waypoint x="433.0" y="70.0"></omgdi:waypoint>
+        <omgdi:waypoint x="433.0" y="32.0"></omgdi:waypoint>
+        <omgdi:waypoint x="284.0" y="32.0"></omgdi:waypoint>
+        <omgdi:waypoint x="284.0" y="70.0"></omgdi:waypoint>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="14.0" width="100.0" x="330.0" y="41.0"></omgdc:Bounds>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</definitions>

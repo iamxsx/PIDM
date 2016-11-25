@@ -1,0 +1,97 @@
+* {
+    margin: 0;
+    padding: 0;
+
+}
+
+
+ul {
+    list-style-type: none;
+}
+
+
+
+/**
+ * Submenu
+ -----------------------------*/
+.submenu {
+    display: none;
+    background: #ffffff;
+    font-size: 14px;
+}
+
+.submenu li {
+    border-bottom: 1px solid #cecdca;
+}
+
+.submenu a {
+    display: block;
+    text-decoration: none;
+    color: #545454;
+    background-color: #f7f7f7;
+    padding: 12px;
+    padding-left: 42px;
+    -webkit-transition: all 0.25s ease;
+    -o-transition: all 0.25s ease;
+    transition: all 0.25s ease;
+}
+
+.submenu a:hover {
+    background: #efefed;
+    color: #777777;
+}
+
+.left-nav{
+    background-color: #ffffff;
+    box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.16), 0 2px 4px 0 rgba(0, 0, 0, 0.12);
+    font-size: 1.2em;
+}
+
+.left-nav .head{
+    /*background-color: #6d8390;*/
+    border-left: none;
+    height:60px;
+    border-bottom: 1px solid #dcdadb;
+}
+.left-nav .head:hover{
+    /*background-color: #6d8390;*/
+    border-left: none;
+}
+.left-nav .head .left-nav-item{
+    color: #474747;
+    font-weight: bold;
+    text-align: center;
+    line-height: 60px;
+    margin: 0;
+}
+
+.left-nav li{
+    height: 50px;
+    border-left: 8px solid transparent;
+    border-right: 8px solid transparent;
+}
+
+.left-nav li:hover{
+    border-left: 8px solid #6d8390;
+    background-color: #f1f1f1;
+}
+
+.left-nav .active{
+    border-left: 8px solid #6d8390;
+    background-color: #f1f1f1;
+}
+
+.left-nav-item{
+    height:100%;
+    text-align: left;
+    margin-left: 36px;
+}
+.left-nav-item a{
+    line-height: 50px;
+    color: #474747;
+    text-decoration: none;
+}
+
+.left-nav-item i{
+    margin-right: 6px;
+}

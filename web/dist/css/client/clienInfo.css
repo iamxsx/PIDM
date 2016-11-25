@@ -1,0 +1,50 @@
+
+.Info{
+    margin: 0.5em 0;
+    border: 1px solid silver;
+   /* padding: 0.5em 0.5em;*/
+}
+.container-fluid .row{
+    margin: 0.1em 0;
+    /*font-size: 15px;*/
+}
+#company-name{
+    margin: 0 1em;
+    font-size: 16px;
+}
+.conclass{
+    margin:1em 0;
+}
+.conclass .row {
+    margin: 1.5em 0;
+    font-size: 1.1em;
+}
+.conclass .row .coltext{
+    padding: 0;
+}
+.conclass .row .coltext input{
+    max-height: 2.2em;
+}
+.conclass .row span{
+    color: red;
+}
+.buttonList{
+    margin:3em auto;
+    width: 20em;
+    padding: 0 1em;
+}
+#save-button{
+    margin:2em auto;
+    width: 10em;
+    display: block;
+}
+.buttonList .btn{
+    padding: 0.3em 1.8em;
+}
+[id*='des']{
+    word-break: break-all;
+
+}
+[name*='des']{
+    resize: none;
+}

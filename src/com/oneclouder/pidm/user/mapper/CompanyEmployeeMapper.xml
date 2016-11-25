@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.oneclouder.pidm.user.dao.ICompanyEmployeeDao">
+    <resultMap id="BaseResultMap" type="com.oneclouder.pidm.user.model.CompanyEmployee">
+        <id column="id" property="id"/>
+        <result column="name" property="name"/>
+        <result column="job_position" property="jobPosition"/>
+        <result column="office_phone_num" property="officePhoneNum"/>
+        <result column="cell_phone_num" property="cellPhoneNum"/>
+        <result column="fax_num" property="faxNum"/>
+        <result column="email" property="email"/>
+        <result column="asct_job_position" property="asctJobPosition"/>
+        <result column="nature" property="nature"/>
+        <association column="company_id" property="company" javaType="com.oneclouder.pidm.user.model.CompanyEmployee"
+                     select="com.oneclouder.pidm.user.dao.ICompanyDao.findById"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        id, name, job_position, office_phone_num, cell_phone_num, fax_num, asct_job_position, nature, company_id,email
+    </sql>
+
+    <select id="findById" parameterType="int" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM T_COMPANY_EMPLOYEE
+        WHERE id = #{id}
+    </select>
+
+    <insert id="insert" parameterType="com.oneclouder.pidm.user.model.CompanyEmployee">
+        <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+            SELECT
+            LAST_INSERT_ID()
+        </selectKey>
+        insert into T_COMPANY_EMPLOYEE (name, job_position,
+        office_phone_num, cell_phone_num, fax_num, email,
+        company_id, asct_job_position, nature)
+        values (#{name}, #{jobPosition},
+        #{officePhoneNum}, #{cellPhoneNum}, #{faxNum}, #{email},
+        #{company.id}, #{asctJobPosition}, #{nature})
+    </insert>
+
+    <insert id="insertCpnyAcstRep" parameterType="map">
+        INSERT INTO T_COMPANY_ASSOCIATION_REP (
+        company_id, association_id, company_emp_id
+        ) VALUES ( #{companyId}, #{associationId}, #{cpnyAcstRepId})
+    </insert>
+
+    <select id="getLegalemployeeBycompayId" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+      SELECT * FROM T_COMPANY_EMPLOYEE WHERE company_id = #{cid} AND nature = 1
+    </select>
+    <!--更新公司员工 法人 指定人 -->
+    <update id="update" parameterType="com.oneclouder.pidm.user.model.CompanyEmployee" >
+    update T_COMPANY_EMPLOYEE
+    set
+        name = #{name,jdbcType=VARCHAR},
+        job_position = #{jobPosition,jdbcType=VARCHAR},
+        office_phone_num = #{officePhoneNum,jdbcType=VARCHAR},
+        cell_phone_num = #{cellPhoneNum,jdbcType=VARCHAR},
+        fax_num = #{faxNum,jdbcType=VARCHAR},
+        email = #{email,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+
+    </update>
+
+
+</mapper>

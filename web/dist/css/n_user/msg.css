@@ -1,0 +1,36 @@
+@charset "UTF-8";
+
+.msg-sty {
+    width: 650px;
+    height: 300px;
+    margin: 100px auto;
+    border: 1px solid  #eee;
+}
+
+.msg-header {
+    height: 40px;
+    background-color: #428BCA;
+}
+
+.msg-titel {
+    height: 50px;
+    line-height:50px;
+    width: 1170px;
+    margin: 0px auto;
+    color: #c0c0c0;
+    background-color: #428BCA;
+}
+
+.msg-tip {
+    height: 260px;
+    line-height:260px;
+    text-align: center;
+}
+
+.info {
+    letter-spacing: 2px;
+}
+
+.full {
+    height: 50px;
+}

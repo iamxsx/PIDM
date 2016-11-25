@@ -1,0 +1,258 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.oneclouder.model.TCompanyEmployeeMapper" >
+  <resultMap id="BaseResultMap" type="com.oneclouder.model.TCompanyEmployee" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="job_position" property="jobPosition" jdbcType="VARCHAR" />
+    <result column="office_phone_num" property="officePhoneNum" jdbcType="VARCHAR" />
+    <result column="cell_phone_num" property="cellPhoneNum" jdbcType="VARCHAR" />
+    <result column="fax_num" property="faxNum" jdbcType="VARCHAR" />
+    <result column="company_id" property="companyId" jdbcType="INTEGER" />
+    <result column="asct_job_position" property="asctJobPosition" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    id, name, job_position, office_phone_num, cell_phone_num, fax_num, company_id, asct_job_position
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.oneclouder.model.TCompanyEmployeeExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from T_COMPANY_EMPLOYEE
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from T_COMPANY_EMPLOYEE
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from T_COMPANY_EMPLOYEE
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.oneclouder.model.TCompanyEmployeeExample" >
+    delete from T_COMPANY_EMPLOYEE
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.oneclouder.model.TCompanyEmployee" >
+    insert into T_COMPANY_EMPLOYEE (id, name, job_position, 
+      office_phone_num, cell_phone_num, fax_num, 
+      company_id, asct_job_position)
+    values (#{id,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, #{jobPosition,jdbcType=VARCHAR}, 
+      #{officePhoneNum,jdbcType=VARCHAR}, #{cellPhoneNum,jdbcType=VARCHAR}, #{faxNum,jdbcType=VARCHAR}, 
+      #{companyId,jdbcType=INTEGER}, #{asctJobPosition,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.oneclouder.model.TCompanyEmployee" >
+    insert into T_COMPANY_EMPLOYEE
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="name != null" >
+        name,
+      </if>
+      <if test="jobPosition != null" >
+        job_position,
+      </if>
+      <if test="officePhoneNum != null" >
+        office_phone_num,
+      </if>
+      <if test="cellPhoneNum != null" >
+        cell_phone_num,
+      </if>
+      <if test="faxNum != null" >
+        fax_num,
+      </if>
+      <if test="companyId != null" >
+        company_id,
+      </if>
+      <if test="asctJobPosition != null" >
+        asct_job_position,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="name != null" >
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="jobPosition != null" >
+        #{jobPosition,jdbcType=VARCHAR},
+      </if>
+      <if test="officePhoneNum != null" >
+        #{officePhoneNum,jdbcType=VARCHAR},
+      </if>
+      <if test="cellPhoneNum != null" >
+        #{cellPhoneNum,jdbcType=VARCHAR},
+      </if>
+      <if test="faxNum != null" >
+        #{faxNum,jdbcType=VARCHAR},
+      </if>
+      <if test="companyId != null" >
+        #{companyId,jdbcType=INTEGER},
+      </if>
+      <if test="asctJobPosition != null" >
+        #{asctJobPosition,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.oneclouder.model.TCompanyEmployeeExample" resultType="java.lang.Integer" >
+    select count(*) from T_COMPANY_EMPLOYEE
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update T_COMPANY_EMPLOYEE
+    <set >
+      <if test="record.id != null" >
+        id = #{record.id,jdbcType=INTEGER},
+      </if>
+      <if test="record.name != null" >
+        name = #{record.name,jdbcType=VARCHAR},
+      </if>
+      <if test="record.jobPosition != null" >
+        job_position = #{record.jobPosition,jdbcType=VARCHAR},
+      </if>
+      <if test="record.officePhoneNum != null" >
+        office_phone_num = #{record.officePhoneNum,jdbcType=VARCHAR},
+      </if>
+      <if test="record.cellPhoneNum != null" >
+        cell_phone_num = #{record.cellPhoneNum,jdbcType=VARCHAR},
+      </if>
+      <if test="record.faxNum != null" >
+        fax_num = #{record.faxNum,jdbcType=VARCHAR},
+      </if>
+      <if test="record.companyId != null" >
+        company_id = #{record.companyId,jdbcType=INTEGER},
+      </if>
+      <if test="record.asctJobPosition != null" >
+        asct_job_position = #{record.asctJobPosition,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update T_COMPANY_EMPLOYEE
+    set id = #{record.id,jdbcType=INTEGER},
+      name = #{record.name,jdbcType=VARCHAR},
+      job_position = #{record.jobPosition,jdbcType=VARCHAR},
+      office_phone_num = #{record.officePhoneNum,jdbcType=VARCHAR},
+      cell_phone_num = #{record.cellPhoneNum,jdbcType=VARCHAR},
+      fax_num = #{record.faxNum,jdbcType=VARCHAR},
+      company_id = #{record.companyId,jdbcType=INTEGER},
+      asct_job_position = #{record.asctJobPosition,jdbcType=VARCHAR}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.oneclouder.model.TCompanyEmployee" >
+    update T_COMPANY_EMPLOYEE
+    <set >
+      <if test="name != null" >
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="jobPosition != null" >
+        job_position = #{jobPosition,jdbcType=VARCHAR},
+      </if>
+      <if test="officePhoneNum != null" >
+        office_phone_num = #{officePhoneNum,jdbcType=VARCHAR},
+      </if>
+      <if test="cellPhoneNum != null" >
+        cell_phone_num = #{cellPhoneNum,jdbcType=VARCHAR},
+      </if>
+      <if test="faxNum != null" >
+        fax_num = #{faxNum,jdbcType=VARCHAR},
+      </if>
+      <if test="companyId != null" >
+        company_id = #{companyId,jdbcType=INTEGER},
+      </if>
+      <if test="asctJobPosition != null" >
+        asct_job_position = #{asctJobPosition,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.oneclouder.model.TCompanyEmployee" >
+    update T_COMPANY_EMPLOYEE
+    set name = #{name,jdbcType=VARCHAR},
+      job_position = #{jobPosition,jdbcType=VARCHAR},
+      office_phone_num = #{officePhoneNum,jdbcType=VARCHAR},
+      cell_phone_num = #{cellPhoneNum,jdbcType=VARCHAR},
+      fax_num = #{faxNum,jdbcType=VARCHAR},
+      company_id = #{companyId,jdbcType=INTEGER},
+      asct_job_position = #{asctJobPosition,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

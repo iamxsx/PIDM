@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="../../../../dist/css/bootstrap.min.css">
+    <script src="../../../../dist/js/jquery.min.js"></script>
+    <script src="../../../../dist/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="../../../../dist/css/n_user/register.css">
+    <style>
+        .register-box, .user-info{
+            width: 1000px;
+            min-width:1000px;
+        }
+        .modal-lg{
+            width: 1050px;
+        }
+        .modal-body{
+            padding: 0px;
+        }
+    </style>
+</head>
+<body>
+
+<!-- Button trigger modal -->
+<button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#myModal">
+    Launch demo modal
+</button>
+
+<!-- Modal -->
+<div class="modal fade bs-example-modal-lg" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <h4 class="modal-title" id="myModalLabel">Modal title</h4>
+            </div>
+            <div class="modal-body">
+                <div id="user-box" class="user-info">
+                    <table class="table table-bordered">
+                        <caption class="table-title">账号基本信息</caption>
+                        <tr>
+                            <th colspan="2"><span class="font-x">*</span>账号</th>
+                            <td colspan="2" id="user_account">梅州宝丽华</td>
+                        </tr>
+                        <tr>
+                            <th><span class="font-x">*</span>申请人姓名</th>
+                            <td id="user_realName">梅州宝丽华</td>
+                            <th><span class="font-x">*</span>申请人身份证</th>
+                            <td id="user_IDcard">445281199412081114</td>
+                        </tr>
+                        <tr>
+                            <th><span class="font-x">*</span>申请人手机号码</th>
+                            <td id="user_phoneNum">18813973403</td>
+                            <th><span class="font-x">*</span>申请人联系邮箱</th>
+                            <td id="user_email">edenxuting@163.com</td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="register-box">
+                    <div id="user-info" class="user page">
+                    </div>
+                    <table class="table table-bordered page" style="vertical-align: middle">
+                        <caption class="table-title">广东省价格和产业发展协会入会申请表</caption>
+                        <tbody>
+                        <tr>
+                            <th><span class="font-x">*</span>单位名称</th>
+                            <td colspan="3" id="company_name">广东省宝丽华电力有限公司</td>
+                            <th><span class="font-x">*</span>单位性质</th>
+                            <td id="company_nature">股份有限</td>
+                        </tr>
+                        <tr>
+                            <th><span class="font-x">*</span>通讯地址</th>
+                            <td colspan="3" id="company_address">广东省宝丽华电力有限公司</td>
+                            <th><span class="font-x">*</span>邮政编码</th>
+                            <td id="company_zipCode">515400</td>
+                        </tr>
+                        <tr>
+                            <th rowspan="2"><span class="font-x">*</span>法人代表</th>
+                            <th style="width: 180px"><span class="font-x">*</span>姓名</th>
+                            <th><span class="font-x">*</span>单位职务</th>
+                            <th><span class="font-x">*</span>办公电话</th>
+                            <th colspan="2"><span class="font-x">*</span>手机</th>
+                        </tr>
+                        <tr>
+                            <td id="legalRep_name">侯俊峰</td>
+                            <td id="legalRep_jopPosition">董事长</td>
+                            <td id="legalRep_officePhoneNum">020-2583588</td>
+                            <td colspan="2" id="legalRep_cellPhoneNum">18813940312</td>
+                        </tr>
+                        <tr>
+                            <th rowspan="7"><input name="company.join" style="position: absolute; top: -999em;"><span
+                                    class="font-x">*</span>申请加入
+                            </th>
+                            <th colspan="2">协会</th>
+                            <th colspan="3">会员单位级别</th>
+                        </tr>
+                        <tr>
+                            <td rowspan="2" colspan="2">
+                                <input type="checkbox" name="company.associationName"
+                                       value="广东省价格和产业发展协会"
+                                       id="association-name" checked="checked">
+                                广东省价格和产业发展协会
+                            </td>
+                            <td class="my-td-border">
+                                <input type="radio" name="company.associationUnit" value="副会长单位"
+                                       id="asct-jp1" checked>
+                                副会长单位
+                            </td>
+                            <td class="my-td-border"><input type="radio" name="company.associationUnit" value="监事长单位" id="asct-jp2">
+                                监事长单位
+                            </td>
+                            <td class="my-td-border"><input type="radio" name="company.associationUnit" value="常务理事单位" id="asct-jp3" >
+                                常务理事单位
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="my-td-border"><input type="radio" name="company.associationUnit" value="理事单位" id="asct-jp4">
+                                理事单位
+                            </td>
+                            <td class="my-td-border"><input type="radio" name="company.associationUnit" value="监事单位" id="asct-jp5" >
+                                监事单位
+                            </td>
+                            <td class="my-td-border"><input type="radio" name="company.associationUnit" value="会员单位" id="asct-jp6">
+                                会员单位
+                            </td>
+                        </tr>
+                        <th colspan="2">分会</th>
+                        <th colspan="3">会员单位级别</th>
+                        <tr>
+                            <td class="my-td-tborder"><input type="radio" name="company.chapterName" value="评估鉴定分会"
+                                                             id="chapt-name1" checked/>评估鉴定分会</td>
+                            <td class="my-td-trborder"><input type="radio" name="company.chapterName" value="电力价格分会"
+                                                              id="chapt-name2"/>电力价格分会</td>
+                            <td class="my-td-tborder"><input type="radio" name="company.chapterUnit" value="会长单位"
+                                                             id="chapt-unit1" checked/>会长单位</td>
+                            <td class="my-td-tborder"><input type="radio" name="company.chapterUnit" value="副会长单位"
+                                                             id="chapt-unit2"/>副会长单位</td>
+                            <td class="my-td-tborder"></td>
+                        </tr>
+                        <tr>
+                            <td class="my-td-border"><input type="radio" name="company.chapterName" value="农产品价格分会"
+                                                            id="chapt-name3"/>农产品价格分会</td>
+                            <td class="my-td-rborder"><input type="radio" name="company.chapterName" value="燃气价格分会"
+                                                             id="chapt-name4"/>燃气价格分会</td>
+                            <td colspan="" class="my-td-border"><input type="radio" name="company.chapterUnit" value="常务理事单位"
+                                                                       id="chapt-unit3"/>常务理事单位
+                            </td>
+                            <td colspan="" class="my-td-border"><input type="radio" name="company.chapterUnit" value="理事单位"
+                                                                       id="chapt-unit4"/>理事单位</td>
+                        </tr>
+                        <tr>
+                            <td class="my-td-border" style="width: 180px"><input type="radio" name="company.chapterName" value="价格与公平竞争分会"
+                                                                                 id="chapt-name5"/>价格与公平竞争分会</td>
+                            <td class="my-td-rborder">
+                            </td>
+                            <td class="my-td-border"><input type="radio" name="company.chapterUnit" value="会员单位"
+                                                            id="chapt-unit5"/>会员单位</td>
+                        </tr>
+
+
+                        <span>
+                                    <!--动态拼接 推荐人-->
+                                    <tr>
+                                        <th rowspan="4">推荐人选及拟任分会职务
+                                            <sapn class="tip">（协会副会长单位、分会会长单位和副会长单位至少要有一人）</sapn>
+                                        </th>
+                                        <th>姓名</th>
+                                        <th>单位职务</th>
+                                        <th>协会职务</th>
+                                        <th colspan="2">分会职务</th>
+                                    </tr>
+                                    <tr>
+                                        <td rowspan="3" id="intr0_name">招健枫</td>
+                                        <td id="intr0_jopPosition">董事长</td>
+                                        <td id="intr0_asctJopPosition">秘书长</td>
+                                        <td colspan="2" id="intr0_chapterJopPosition">秘书长</td>
+                                    </tr>
+                                    <tr>
+                                        <th>电子邮箱</th>
+                                        <th>办公电话</th>
+                                        <th colspan="2">手机</th>
+                                    </tr>
+                                    <tr>
+                                        <td id="intr0_eamil">edenxuting@163.com</td>
+                                        <td id="intr0_officePhoneNum">020-2583833</td>
+                                        <td colspan="2" id="intr0_cellPhoneNum">18813973403</td>
+                                    </tr>
+                            <!--动态拼接 -->
+
+                            <!--动态拼接 推荐人-->
+                                    <tr>
+                                        <th rowspan="4">推荐人选及拟任分会职务
+                                            <sapn class="tip">（协会副会长单位、分会会长单位和副会长单位至少要有一人）</sapn>
+                                        </th>
+                                        <th>姓名</th>
+                                        <th>单位职务</th>
+                                        <th>协会职务</th>
+                                        <th colspan="2">分会职务</th>
+                                    </tr>
+                                    <tr>
+                                        <td rowspan="3" id="intr1_name">招健枫</td>
+                                        <td id="intr1_jopPosition">董事长</td>
+                                        <td id="intr1_asctJopPosition">秘书长</td>
+                                        <td colspan="2" id="intr1_chapterJopPosition">秘书长</td>
+                                    </tr>
+                                    <tr>
+                                        <th>电子邮箱</th>
+                                        <th>办公电话</th>
+                                        <th colspan="2">手机</th>
+                                    </tr>
+                                    <tr>
+                                        <td id="intr1_eamil">edenxuting@163.com</td>
+                                        <td id="intr1_officePhoneNum">020-2583833</td>
+                                        <td colspan="2" id="intr1_cellPhoneNum">18813973403</td>
+                                    </tr>
+                            <!--动态拼接 联系人-->
+                                    <tr>
+                                        <th rowspan="4"><span class="font-x">*</span>单位指定联系人
+                                            <sapn class="tip">（至少一人）</sapn>
+                                        </th>
+                                        <th><span class="font-x">*</span>姓名</th>
+                                        <th><span class="font-x">*</span>单位职务</th>
+                                        <th><span class="font-x">*</span>办公电话</th>
+                                        <th colspan="2"><span class="font-x">*</span>手机</th>
+                                    </tr>
+                                    <tr>
+                                        <td rowspan="3" id="designatedContact0_name">招健枫</td>
+                                        <td id="designatedContact0_jopPosition">董事长</td>
+                                        <td id="designatedContact0_officePhoneNum">020-2583833</td>
+                                        <td colspan="2" id="designatedContact0_cellPhoneNum">18813943403</td>
+                                    </tr>
+                                    <tr>
+                                        <th><span class="font-x">*</span>电子邮箱</th>
+                                        <th>传真号码</th>
+                                        <th colspan="2"><span class="font-x">*</span>微信号/QQ号</th>
+                                    </tr>
+                                    <tr>
+                                        <td id="designatedContact0_email">edenxuting@163.com</td>
+                                        <td id="designatedContact0_faxNum">020-2583833</td>
+                                        <td colspan="2" id="designatedContact0_onlineNum">18813973403</td>
+                                    </tr>
+
+                            <!--动态拼接 联系人-->
+                                    <tr>
+                                        <th rowspan="4">单位指定联系人</th>
+                                        <th>姓名</th>
+                                        <th>单位职务</th>
+                                        <th>办公电话</th>
+                                        <th colspan="2">手机</th>
+                                    </tr>
+                                    <tr>
+                                        <td rowspan="3" id="designatedContact1_name">招健枫</td>
+                                        <td id="designatedContact1_jopPosition">董事长</td>
+                                        <td id="designatedContact1_officePhoneNum">020-2583833</td>
+                                        <td colspan="2" id="designatedContact1_cellPhoneNum">18813943403</td>
+                                    </tr>
+                                    <tr>
+                                        <th>电子邮箱</th>
+                                        <th>传真号码</th>
+                                        <th colspan="2">微信号/QQ号</th>
+                                    </tr>
+                                    <tr>
+                                        <td id="designatedContact1_email">edenxuting@163.com</td>
+                                        <td id="designatedContact1_faxNum">020-2583833</td>
+                                        <td colspan="2" id="designatedContact1_onlineNum">18813973403</td>
+                                    </tr>
+                            <!--动态拼接-->
+                                    </span>
+
+                        <tr>
+                            <th>单位简介<span class="tip">（300字以内）</span></th>
+                            <td colspan="7" id="company_introduction">
+                                    <textarea class="intrud-sty">
+                                    </textarea>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>希望得到协会或者分会服务和支持的主要内容</th>
+                            <td colspan="7" id="company_demand">
+                                    <textarea class="intrud-sty">
+                                    </textarea>
+                        </tr>
+                        <tr>
+                            <th>附件：</th>
+                            <td colspan="7" style="line-height: 2;text-indent: 2em; width: 3000px;">
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                    <div><span class="font-x">备注：各分会会员是广东省价格和产业发展协会的当然会员。</span></div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary">Save changes</button>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.oneclouder.pidm.user.dao.IDescriptionDao">
+    <resultMap id="BaseResultMap" type="com.oneclouder.pidm.user.model.Description">
+        <id column="id" property="id"/>
+        <result column="company_id" property="companyId"/>
+        <result column="association_id" property="associationId"/>
+        <result column="description1" property="description1"/>
+        <result column="description2" property="description2"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id, company_id, association_id, description1, description2
+    </sql>
+
+    <insert id="insert" parameterType="com.oneclouder.pidm.user.model.Description">
+        <selectKey keyProperty="id" order="AFTER" resultType="int">
+            SELECT
+            LAST_INSERT_ID()
+        </selectKey>
+        INSERT INTO T_DESCRIPTION(
+        company_id, association_id, description1, description2
+        ) VALUES (#{companyId}, #{associationId}, #{description1}, #{description2})
+    </insert>
+
+    <select id="getDescriptionByAssAndComId" parameterType="map" resultMap="BaseResultMap">
+      SELECT * FROM T_DESCRIPTION WHERE company_id = #{companyId} AND association_id = #{associationId} limit 1
+    </select>
+
+    <!--判断描述记录是否存在-->
+    <select id="getDescriptionLength" parameterType="map" resultType="java.lang.Integer">
+        SELECT COUNT(*) FROM T_DESCRIPTION WHERE company_id = #{companyId} AND association_id =#{associationId}
+    </select>
+
+    <insert id="insertDes" parameterType="map">
+        INSERT INTO T_DESCRIPTION(company_id,association_id,description1,description2) VALUES(#{companyId},#{associationId},#{description1},#{description2});
+    </insert>
+</mapper>

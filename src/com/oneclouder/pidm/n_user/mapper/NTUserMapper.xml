@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.oneclouder.pidm.n_user.dao.INTUserDao">
+    <resultMap id="BaseResultMap" type="com.oneclouder.pidm.n_user.model.NUser">
+        <id column="id" property="id"/>
+        <result column="account" property="account"/>
+        <result column="password" property="password"/>
+        <result column="salt" property="salt"/>
+        <result column="phone_num" property="phoneNum"/>
+        <result column="IDcard" property="IDcard"/>
+        <result column="real_name" property="realName"/>
+        <result column="email" property="email"/>
+        <result column="verifycode" property="verifycode"/>
+        <result column="status" property="status"/>
+        <result column="user_role" property="userRole"/>
+        <association property="company" column="company_id" javaType="com.oneclouder.pidm.n_user.model.NCompany"
+                     select="com.oneclouder.pidm.n_user.dao.INTCompanyDao.findById"/>
+    </resultMap>
+
+    <resultMap id="FindBaseName" type="com.oneclouder.pidm.n_user.model.NUser">
+        <id column="id" property="id"/>
+        <result column="real_name" property="realName"/>
+        <association property="company" column="company_id" javaType="com.oneclouder.pidm.n_user.model.NCompany"
+                     select="com.oneclouder.pidm.n_user.dao.ITNCompanyDao.findById"/>
+    </resultMap>
+    
+    <resultMap id="MinResultMap" type="com.oneclouder.pidm.n_user.model.NUser">
+        <id column="id" property="id"/>
+        <result column="account" property="account"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id, account, password, salt, phone_num, IDcard, real_name, email, verifycode, status,
+        company_id, user_role
+    </sql>
+    
+    <sql id="Column_min">
+        id, account
+    </sql>
+
+    <sql id="All_List">
+        u.id, u.account, u.password, u.salt, u.phone_num, u.IDcard, u.real_name, u.email uemail, u.verifycode,u.status,
+        u.company_id,
+        m.identifier, m.name companyName, m.nature mnature, m.address, m.zip_code,
+        m.register_time, m.association_name, m.association_unit, m.chapter_name, m.chapter_unit,
+        m.introduction, m.demand,m.audit_opinion,
+        em.id EmployeeId, em.name desName, em.job_position, em.asct_job_position, em.chapter_job_position, em.email ememail,
+        em.office_phone_num, em.cell_phone_num, em.fax_num, em.online_num, em.nature emnature
+    </sql>
+
+    <!--xucb：根据id查询完整的user信息-->
+    <select id="findById" parameterType="int" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM T_N_TEMP_USER
+        WHERE id = #{userId}
+    </select>
+
+    <!--xucb:根据id查询出临时资源表中的文件路径-->
+    <select id="findTempUrl" parameterType="int" resultType="String">
+        SELECT file_url
+        FROM T_N_TEMP_DATUM
+        WHERE user_id = #{int};
+    </select>
+
+    <select id="selectTUserAll" parameterType="java.lang.Integer" resultType="map">
+        SELECT
+        <include refid="All_List"/>
+        FROM T_N_TEMP_USER u,T_N_TEMP_COMPANY m,T_N_TEMP_COMPANY_EMPLOYEE em
+        WHERE u.company_id = m.id AND u.company_id = em.company_id AND u.id = #{uid}
+    </select>
+
+    <select id="findByVerifycode" parameterType="java.lang.String" resultMap="MinResultMap">
+        SELECT
+        <include refid="Column_min"/>
+        FROM T_N_TEMP_USER
+        WHERE binary verifycode = #{verifycode}
+    </select>
+
+    <update id="updateTUser" parameterType="com.oneclouder.pidm.n_user.model.NUser">
+        UPDATE T_N_TEMP_USER
+        SET phone_num = #{phoneNum},IDcard = #{IDcard},real_name = #{realName},email = #{email}
+        WHERE id = #{id}
+    </update>
+
+
+</mapper>

@@ -1,0 +1,66 @@
+body{
+    font: 15px Microsoft YaHei,Georgia,Verdana,Arial,Sans-serif;
+    color: #666;
+}
+.container-fluid{
+    width: 65%;
+    position: relative;
+    background-color: white;
+    padding-top: 2em;
+    margin-bottom: 2em;
+    box-shadow: 0 0 12px rgba(0,0,0,.1);
+}
+.survey-title{
+    font-size: 25px;
+    font-weight: bold;
+    color:black;
+    width: 22em;
+    margin: 1em auto;
+    text-align: center;
+}
+.survey-content .row{
+    margin: 0.5em 0;
+}
+.topic-content{
+    background: #eee;
+    padding: 8px 10px;
+}
+.optionradio{
+    display: inline;
+}
+.optionContent{
+    display: inline;
+    width: 60%;
+    margin: 0 10px;
+}
+.option-content{
+    margin: 0 2em;
+}
+
+.question-info{
+    width:95%;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 2em;
+}
+textarea{
+    resize: none;
+}
+.btn-submit{
+    width: 10em;
+    margin: 0 auto;
+}
+.submit{
+    margin: 2em auto;
+    padding: 0.4em 3em;
+}
+.question-content{
+    border: 0px;
+    border-bottom: 1px solid black;
+}
+.statisNum{
+    margin-top: 4em;
+    /*margin-left: 6em;*/
+    /*text-align: center;*/
+}
+
